@@ -1,1 +1,0 @@
---out-path /home/ray/projects/c/RONG/build/gladsources/glad --api gl:core=3.3 --reproducible c --loader
