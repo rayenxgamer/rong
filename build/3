@@ -1,0 +1,25 @@
+#include "game/game.h"
+#include <game/window.h>
+#include <glad/gl.h>
+#include <GLFW/glfw3.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define HEIGHT 480
+#define WIDTH 640
+
+int main() {
+
+
+
+  struct window window = {480, 640,"RONG: pong but RENGENINED"};
+  game_start();
+
+  while(!glfwWindowShouldClose(window)){
+    game_update(window);
+  }
+
+  game_shutdown(window);
+
+  return 0;
+};

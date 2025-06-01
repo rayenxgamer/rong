@@ -1,0 +1,21 @@
+# ninja log v5
+5665	5674	1748792412164473092	glad-populate-prefix/src/glad-populate-stamp/glad-populate-install	8fd49951f23376da
+5685	5700	1748792412188208079	glad-populate-prefix/src/glad-populate-stamp/glad-populate-done	9c4126767dfb7dfd
+5674	5685	1748792412172384754	/home/ray/projects/c/RONG/build/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-test	8eaf0f4264e9207f
+5646	5655	1748792412144693936	glad-populate-prefix/src/glad-populate-stamp/glad-populate-configure	6c4cd759941ae9ff
+5665	5674	1748792412164473092	/home/ray/projects/c/RONG/build/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-install	8fd49951f23376da
+5685	5700	1748792412188208079	CMakeFiles/glad-populate-complete	9c4126767dfb7dfd
+5636	5646	1748792412136782274	/home/ray/projects/c/RONG/build/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-patch	a769ca56b6f2085
+5674	5685	1748792412172384754	glad-populate-prefix/src/glad-populate-stamp/glad-populate-test	8eaf0f4264e9207f
+5685	5700	1748792412188208079	/home/ray/projects/c/RONG/build/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-done	9c4126767dfb7dfd
+0	10	1748792406499676145	glad-populate-prefix/src/glad-populate-stamp/glad-populate-mkdir	6ce2b3fb1ed9b45d
+0	10	1748792406499676145	/home/ray/projects/c/RONG/build/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-mkdir	6ce2b3fb1ed9b45d
+11	5626	1748792412117003118	glad-populate-prefix/src/glad-populate-stamp/glad-populate-download	ffea6a7dcb6cf418
+5626	5636	1748792412124914780	glad-populate-prefix/src/glad-populate-stamp/glad-populate-update	df2ff2dc427abea9
+5655	5665	1748792412152605598	glad-populate-prefix/src/glad-populate-stamp/glad-populate-build	b7ea01221a0a178d
+11	5626	1748792412117003118	/home/ray/projects/c/RONG/build/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-download	ffea6a7dcb6cf418
+5626	5636	1748792412124914780	/home/ray/projects/c/RONG/build/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-update	df2ff2dc427abea9
+5655	5665	1748792412152605598	/home/ray/projects/c/RONG/build/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-build	b7ea01221a0a178d
+5646	5655	1748792412144693936	/home/ray/projects/c/RONG/build/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-configure	6c4cd759941ae9ff
+5636	5646	1748792412136782274	glad-populate-prefix/src/glad-populate-stamp/glad-populate-patch	a769ca56b6f2085
+5685	5700	1748792412188208079	/home/ray/projects/c/RONG/build/_deps/glad-subbuild/CMakeFiles/glad-populate-complete	9c4126767dfb7dfd

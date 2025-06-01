@@ -1,0 +1,21 @@
+# ninja log v5
+4600	4610	1748792402199617106	/home/ray/projects/c/RONG/build/_deps/glfw3-subbuild/glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-build	ed1ba6e6c7949647
+4573	4582	1748792402171925833	glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-patch	a7c7288514d1e108
+4621	4631	1748792402219396586	glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-test	b28baf2ee3a09dc0
+4563	4573	1748792402164014041	glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-update	14417ac63a56c705
+11	4563	1748792402152146353	/home/ray/projects/c/RONG/build/_deps/glfw3-subbuild/glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-download	a6f3082b86e1d68a
+4573	4582	1748792402171925833	/home/ray/projects/c/RONG/build/_deps/glfw3-subbuild/glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-patch	a7c7288514d1e108
+4631	4646	1748792402235220171	CMakeFiles/glfw3-populate-complete	205a4f6870db66a3
+4631	4646	1748792402235220171	glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-done	205a4f6870db66a3
+4621	4631	1748792402219396586	/home/ray/projects/c/RONG/build/_deps/glfw3-subbuild/glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-test	b28baf2ee3a09dc0
+4600	4610	1748792402199617106	glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-build	ed1ba6e6c7949647
+4610	4621	1748792402211484794	/home/ray/projects/c/RONG/build/_deps/glfw3-subbuild/glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-install	e745480e3e8844ce
+4631	4646	1748792402235220171	/home/ray/projects/c/RONG/build/_deps/glfw3-subbuild/CMakeFiles/glfw3-populate-complete	205a4f6870db66a3
+4582	4600	1748792402191705314	/home/ray/projects/c/RONG/build/_deps/glfw3-subbuild/glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-configure	790469936ee6bf6
+4631	4646	1748792402235220171	/home/ray/projects/c/RONG/build/_deps/glfw3-subbuild/glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-done	205a4f6870db66a3
+0	10	1748792397597618327	glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-mkdir	c06ae61209215ec6
+4563	4573	1748792402164014041	/home/ray/projects/c/RONG/build/_deps/glfw3-subbuild/glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-update	14417ac63a56c705
+11	4563	1748792402152146353	glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-download	a6f3082b86e1d68a
+4582	4600	1748792402191705314	glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-configure	790469936ee6bf6
+0	10	1748792397597618327	/home/ray/projects/c/RONG/build/_deps/glfw3-subbuild/glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-mkdir	c06ae61209215ec6
+4610	4621	1748792402211484794	glfw3-populate-prefix/src/glfw3-populate-stamp/glfw3-populate-install	e745480e3e8844ce
