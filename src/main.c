@@ -1,5 +1,5 @@
-#include <game/game.h>
 #include <game/window.h>
+#include <game/game.h>
 
 int main() {
 
