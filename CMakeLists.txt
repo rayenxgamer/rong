@@ -5,7 +5,7 @@ project(rong
   LANGUAGES C
 )
 
-set(CMAKE_C_STANDARD)
+set(CMAKE_C_STANDARD 99)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party)
