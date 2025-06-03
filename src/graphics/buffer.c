@@ -64,7 +64,7 @@ void vbo_bind(uint32_t *vbo){
   }
 };
 
-void vbo_buffer(size_t size, void* data, GLenum usage){
+void vbo_buffer(size_t size, const void* data, GLenum usage){
   glBufferData(GL_ARRAY_BUFFER, size, data, usage);
 }
 
@@ -86,6 +86,6 @@ void ibo_bind(uint32_t *ibo){
   }
 };
 
-void ibo_buffer(size_t size, void *data, GLenum usage){
+void ibo_buffer(size_t size, const void *data, GLenum usage){
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, usage);
 }

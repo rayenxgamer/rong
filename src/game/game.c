@@ -1,11 +1,16 @@
 #include <game/game.h>
+#include <graphics/shader.h>
 #include <input/input.h>
 #include <stdlib.h>
 
 int game_run(GLFWwindow* window){
+  struct shader shader = shader_create("../shaders/vs.glsl", "../shaders/fs.glsl");
+  vec4 vector = {12,11,10,5};
+  shader_bind(shader);
+  shader_setv4(shader, "testv4", vector);
+
   while (!glfwWindowShouldClose(window)) {
     game_update(window);
-
   }
   return EXIT_SUCCESS;
 };

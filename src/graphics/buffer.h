@@ -12,8 +12,8 @@ void vao_attrib(uint32_t vao, uint32_t vbo, GLuint index, GLint size
 
 uint32_t vbo_create();
 void vbo_bind(uint32_t* vbo);
-void vbo_buffer(size_t size, void* data, GLenum usage);
+void vbo_buffer(size_t size, const void* data, GLenum usage);
 
 uint32_t ibo_create();
 void ibo_bind(uint32_t* inb);
-void ibo_buffer(size_t size, void* data, GLenum usage);
+void ibo_buffer(size_t size, const void* data, GLenum usage);

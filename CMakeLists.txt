@@ -16,6 +16,9 @@ add_executable(rong
   src/game/game.c
   src/game/window.c
   src/input/input.c
+  src/graphics/renderer.c
+  src/graphics/shader.c
+  src/graphics/buffer.c
 )
 
 
