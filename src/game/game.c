@@ -1,6 +1,8 @@
 #include <game/game.h>
 #include <graphics/shader.h>
+#include <math/mat4.h>
 #include <input/input.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 int game_run(GLFWwindow* window){
@@ -8,6 +10,19 @@ int game_run(GLFWwindow* window){
   vec4 vector = {12,11,10,5};
   shader_bind(shader);
   shader_setv4(shader, "testv4", vector);
+  mat4 matrix;
+  mat4_identity(matrix);
+  mat4_print(matrix);
+  printf("--------------\n");
+  mat4 matrix2;
+  mat4_identity(matrix2);
+  mat4_print(matrix2);
+  printf("--------------\n");
+  mat4 result;
+  mat4_add(result, matrix, matrix2);
+  mat4_print(result);
+  printf("--------------\n");
+
 
   while (!glfwWindowShouldClose(window)) {
     game_update(window);
