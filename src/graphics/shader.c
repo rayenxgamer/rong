@@ -101,3 +101,11 @@ void shader_setv4(struct shader shader, const char* name, vec4 value){
 void shader_setv3(struct shader shader, const char* name, vec3 value){
   glUniform3fv(glGetUniformLocation(shader.handle, name),1, &value[0]);
 };
+
+void shader_setm4x4(struct shader shader, const char* name, mat4 value){
+  glUniformMatrix4fv(glGetUniformLocation(shader.handle, name), 1, GL_FALSE, &value[0][0]);
+};
+
+void shader_setm3x3(struct shader shader, const char* name, mat3 value){
+  glUniformMatrix3fv(glGetUniformLocation(shader.handle, name), 1, GL_FALSE, &value[0][0]);
+};

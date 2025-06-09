@@ -2,6 +2,7 @@
 
 #include <glad/gl.h>
 #include <graphics/buffer.h>
+#include <graphics/shader.h>
 
 struct rect{
   float x,y;
@@ -12,5 +13,5 @@ struct rect{
 };
 
 struct rect renderer_initrect(float x, float y, int height, int width);
-void renderer_drawrect(struct rect rectangle);
+void renderer_drawrect(struct rect rectangle, struct shader shader);
 

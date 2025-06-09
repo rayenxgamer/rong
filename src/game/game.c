@@ -1,6 +1,6 @@
 #include <game/game.h>
-#include <graphics/shader.h>
 #include <math/mat4.h>
+#include <graphics/shader.h>
 #include <input/input.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -3,12 +3,13 @@
 #include <glad/gl.h>
 #include <math/vec3.h>
 #include <math/vec4.h>
+#include <math/mat4.h>
+#include <math/mat3.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <stdbool.h>
-
 
 struct shader{
   uint32_t handle;
@@ -27,5 +28,5 @@ void shader_setui(struct shader shader, const char* name, uint32_t value);
 void shader_setf(struct shader shader, const char* name, float value);
 void shader_setv4(struct shader shader, const char* name, vec4 value);
 void shader_setv3(struct shader shader, const char* name, vec3 value);
-
-
+void shader_setm4x4(struct shader shader, const char* name, mat4 value);
+void shader_setm3x3(struct shader shader, const char* name, mat3 value);
