@@ -2,8 +2,6 @@
 
 #include <math/vec4.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 typedef vec4 mat4[4];
 
@@ -17,6 +15,20 @@ static inline void mat4_identity(mat4 dest){
       }
     }
   }
+};
+
+/*doing this manually might be faster, ill test that sometime
+ also this was copied from linmath and modified to fit here */
+
+static inline void mat4_mult(mat4 dest, mat4 const a, mat4 const b){
+	int k, r, c;
+	for(c = 0; c < 4; c++){
+    for(r = 0; r < 4; r++) {
+		dest[c][r] = 0.0f;
+      for(k = 0; k < 4; k++)
+        dest[c][r] += a[c][k] * b[k][r];
+      }
+    }
 };
 
 static inline void mat4_add(mat4 dest, mat4 const a, mat4 const b){
