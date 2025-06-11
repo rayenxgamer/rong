@@ -7,13 +7,13 @@ project(rong
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# set(OpenGL_GL_PREFERENCE GLVND) #
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_executable(rong
   src/main.c
-  src/game/game.c
   src/game/window.c
   src/input/input.c
   src/graphics/renderer.c
