@@ -21,6 +21,7 @@ add_executable(rong
   src/graphics/buffer.c
 )
 
+#target_compile_options(rong PUBLIC -g)
 
 find_package(glfw3 3.4 QUIET)
 if (NOT glfw3_FOUND)

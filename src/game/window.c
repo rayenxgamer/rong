@@ -1,4 +1,6 @@
 #include <game/window.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #include <stdio.h>
 
 #define TICK_SPEED 0.020f /* currently ecuvilant to roughly 20 milliseonds per tick */
@@ -11,8 +13,8 @@ static void _init(){
 
 static void _update(){
   window.w_update();
-  glfwPollEvents();
   glfwSwapBuffers(window.self);
+  glfwPollEvents();
 }
 
 static void _tick(){
@@ -81,6 +83,19 @@ void window_set_attributes(int height, int width, char* title){
   glfwSetWindowTitle(window.self, title);
   glfwSetWindowSize(window.self, width, height);
 };
+
+bool window_is_pressed(int key){
+  switch (glfwGetKey(window.self, key)) {
+    case GLFW_PRESS:
+    return 1;
+    default:
+    return 0;
+  }
+};
+
+void window_set_should_close(){
+  glfwSetWindowShouldClose(window.self, true);
+}
 
 void window_updateloop(){
   _init();

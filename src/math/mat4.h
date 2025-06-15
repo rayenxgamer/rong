@@ -132,11 +132,9 @@ static inline void mat4_translate(mat4 matrix, vec3 vec){
 };
 
 static inline void mat4_translate_make(mat4 matrix, vec3 vec){
-  mat4_identity(matrix);
-
-  matrix[0][3] = vec[0];
-  matrix[1][3] = vec[1];
-  matrix[2][3] = vec[2];
+  matrix[3][0] = vec[0];
+  matrix[3][1] = vec[1];
+  matrix[3][2] = vec[2];
 };
 
 static inline void mat4_print(mat4 matrix){
