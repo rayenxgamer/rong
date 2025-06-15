@@ -18,6 +18,13 @@ static inline void vec4_sub(vec4 dest, vec4 const a, vec4 const b){
   dest[3] = a[3] - b[3];
 };
 
+static inline void vec4_dupl(vec4 dest, vec4 vector){
+  dest[0] = vector[0];
+  dest[1] = vector[1];
+  dest[2] = vector[2];
+  dest[3] = vector[3];
+};
+
 static inline void vec4_multf(vec4 dest, vec4 const a, float const scalar){
   dest[0] = a[0] * scalar;
   dest[1] = a[1] * scalar;

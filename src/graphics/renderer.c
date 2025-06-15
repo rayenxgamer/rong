@@ -1,4 +1,5 @@
 #include "glad/gl.h"
+#include <GLFW/glfw3.h>
 #include <math/common.h>
 #include <math/mat4.h>
 #include <math/vec3.h>
@@ -39,7 +40,10 @@ void renderer_drawrect(struct rect rectangle, struct shader shader){
   shader_bind(shader);
   mat4 model;
   mat4_identity(model);
-  mat4_translate_make(model, (vec3){rectangle.x, rectangle.y, 0.0f});
+  mat4_print(model);
+  mat4_translate(model, (vec3){rectangle.x, rectangle.y, 0.0f});
+  mat4_rotate(model, glfwGetTime() * deg_to_rad(45), (vec3){0.0f,0.0f,1.0f});
+  //mat4_scale(model, 1.5f);
 
   shader_setm4x4(shader, "model", model);
 

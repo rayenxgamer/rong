@@ -19,28 +19,41 @@ static inline void mat4_identity(mat4 dest){
   }
 };
 
+static inline void mat4_dupl(mat4 dest, mat4 matrix){
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; j++) {
+      dest[i][j] = matrix[i][j];
+    }
+  }
+};
+
 /*doing this manually might be faster, ill test that sometime
  also this was copied from linmath and modified to fit here */
 
-static inline void mat4_mult(mat4 dest, mat4 const a, mat4 const b){
+static inline void mat4_mult(mat4 dest, mat4 a, mat4 b){
 	int k, r, c;
+  mat4 temp_matrix;
 	for(c = 0; c < 4; c++){
     for(r = 0; r < 4; r++) {
-		dest[c][r] = 0.0f;
-      for(k = 0; k < 4; k++)
-        dest[c][r] += a[c][k] * b[k][r];
+      temp_matrix[c][r] = 0.0f;
+      for(k = 0; k < 4; k++){
+        temp_matrix[c][r] += (a[c][k] * b[k][r]);
       }
     }
+  }
+  mat4_dupl(dest, temp_matrix);
 };
 
 static inline void mat4_multv(vec4 dest, mat4 const matrix, vec4 const vector){
+  vec4 temp_vector4;
 	int i, j;
 	for(i = 0; i < 4; i++){
-    dest[i] = 0.0f;
+    temp_vector4[i] = 0.0f;
     for(j = 0; j < 4; j++) {
-      dest[i] += matrix[i][j] * vector[j];
+      temp_vector4[i] += matrix[i][j] * vector[j];
     }
   }
+  vec4_dupl(dest, temp_vector4);
 };
 
 static inline void mat4_add(mat4 dest, mat4 const a, mat4 const b){
@@ -123,11 +136,11 @@ static inline void mat4_rotate(mat4 matrix, float angle, vec3 rotation_axis){
 };
 
 static inline void mat4_translate(mat4 matrix, vec3 vec){
-  mat4 temp_matrix = { {1.0f, 0.0f, 0.0f, vec[0]},
-                       {0.0f, 1.0f, 0.0f, vec[1]},
-                       {0.0f, 0.0f, 1.0f, vec[2]},
-                       {0.0f, 0.0f, 0.0f, 1.0f}, };
-
+  mat4 temp_matrix;
+  mat4_identity(temp_matrix);
+  temp_matrix[3][0] = vec[0];
+  temp_matrix[3][1] = vec[1];
+  temp_matrix[3][2] = vec[2];
   mat4_mult(matrix, matrix, temp_matrix);
 };
 
