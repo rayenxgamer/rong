@@ -72,10 +72,18 @@ static inline void mat4_sub(mat4 dest, mat4 const a, mat4 const b){
   }
 };
 
-static inline void mat4_scale(mat4 matrix, float scale){
+static inline void mat4_scalef(mat4 matrix, float scale){
   mat4 temp_matrix = { {scale, 0.0f, 0.0f,0.0f},
                        {0.0f, scale, 0.0f, 0.0f},
                        {0.0f, 0.0f, scale, 0.0f},
+                       {0.0f, 0.0f, 0.0f, 1.0f} };
+  mat4_mult(matrix, matrix, temp_matrix);
+}
+
+static inline void mat4_scalevf(mat4 matrix,  float x, float y, float z){
+  mat4 temp_matrix = { {x, 0.0f, 0.0f,0.0f},
+                       {0.0f, y, 0.0f, 0.0f},
+                       {0.0f, 0.0f, z, 0.0f},
                        {0.0f, 0.0f, 0.0f, 1.0f} };
   mat4_mult(matrix, matrix, temp_matrix);
 }
@@ -144,6 +152,15 @@ static inline void mat4_translate(mat4 matrix, vec3 vec){
   mat4_mult(matrix, matrix, temp_matrix);
 };
 
+static inline void mat4_translatevf(mat4 matrix, float x, float y, float z){
+  mat4 temp_matrix;
+  mat4_identity(temp_matrix);
+  temp_matrix[3][0] = x;
+  temp_matrix[3][1] = y;
+  temp_matrix[3][2] = z;
+  mat4_mult(matrix, matrix, temp_matrix);
+};
+
 static inline void mat4_translate_make(mat4 matrix, vec3 vec){
   matrix[3][0] = vec[0];
   matrix[3][1] = vec[1];
@@ -151,10 +168,12 @@ static inline void mat4_translate_make(mat4 matrix, vec3 vec){
 };
 
 static inline void mat4_print(mat4 matrix){
+  printf("---------------");
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
       printf("%d", (int)matrix[i][j]);
     }
     printf("\n");
   }
+  printf("---------------");
 };

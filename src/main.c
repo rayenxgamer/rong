@@ -8,7 +8,7 @@ struct shader shader;
 void init(){
   window_set_attributes(480, 640, "RONG: on the RENGINE!");
   shader = shader_create("../shaders/vs.glsl", "../shaders/fs.glsl");
-  rectangledrawtest = renderer_initrect(-0.5f, -0.5f, 50, 50);
+  rectangledrawtest = renderer_initrect(-0.5f, -0.5f, 1.5f, 1.5f);
 };
 
 void render(){

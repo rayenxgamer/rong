@@ -7,7 +7,7 @@
 #include "graphics/shader.h"
 #include <graphics/renderer.h>
 
-struct rect renderer_initrect(float x, float y, int height, int width){
+struct rect renderer_initrect(float x, float y, float height, float width){
 
   uint32_t vao = vao_create();
   uint32_t vbo = vbo_create();
@@ -40,15 +40,13 @@ void renderer_drawrect(struct rect rectangle, struct shader shader){
   shader_bind(shader);
   mat4 model;
   mat4_identity(model);
-  mat4_print(model);
+
   mat4_translate(model, (vec3){rectangle.x, rectangle.y, 0.0f});
-  mat4_rotate(model, glfwGetTime() * deg_to_rad(45), (vec3){0.0f,0.0f,1.0f});
-  //mat4_scale(model, 1.5f);
+  mat4_scalevf(model, rectangle.height, rectangle.width, 0.0f);
 
   shader_setm4x4(shader, "model", model);
 
-  /* TODO: code to handle rotation and translation */
-
+  /* TODO: code to handle rotation */
   vao_bind(rectangle.vao);
   glDrawArrays(GL_TRIANGLES, 0, 6);
   return;

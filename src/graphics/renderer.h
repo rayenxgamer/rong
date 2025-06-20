@@ -6,12 +6,12 @@
 
 struct rect{
   float x,y;
-  int height;
-  int width;
+  float height;
+  float width;
   uint32_t vao;
   uint32_t vbo;
 };
 
-struct rect renderer_initrect(float x, float y, int height, int width);
+struct rect renderer_initrect(float x, float y, float height, float width);
 void renderer_drawrect(struct rect rectangle, struct shader shader);
 
