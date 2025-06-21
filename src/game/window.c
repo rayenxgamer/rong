@@ -1,3 +1,5 @@
+#include "glad/gl.h"
+#include "GLFW/glfw3.h"
 #include <game/window.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -33,6 +35,11 @@ static void _shutdown(){
 static void _error_callback(int error, const char* description){
   printf("%s\n", description);
 }
+
+
+static void _framebuffer_size_callback(GLFWwindow* window, int width, int height){
+  glViewport(0, 0, width, height);
+};
 
 void window_init(RENGINE_FUNC_W init, RENGINE_FUNC_W update, RENGINE_FUNC_W tick, RENGINE_FUNC_W render, RENGINE_FUNC_W shutdown){
   window.w_init = init;
@@ -76,6 +83,7 @@ void window_init(RENGINE_FUNC_W init, RENGINE_FUNC_W update, RENGINE_FUNC_W tick
     exit(1);
   };
 
+  glfwSetFramebufferSizeCallback(window.self, _framebuffer_size_callback);
   glfwSwapInterval(1);
 };
 
