@@ -2,6 +2,7 @@
 #include <game/window.h>
 #include <graphics/renderer.h>
 #include <stdio.h>
+#include <string.h>
 
 struct rect rectangledrawtest;
 struct shader shader;
@@ -30,7 +31,25 @@ void update(){
 };
 void shutdown(){};
 
-int main() {
+int main(int argc, char* argv[]) {
+  if (argc == 2) {
+    int parameter_count = 2;
+    char debug_string[] = "--debug";
+    char help_string[] = "--help";
+    if (memcmp(argv[1],debug_string, strlen(debug_string)) == 0) {
+      #ifndef RENGINE_DEBUG
+      #define RENGINE_DEBUG
+      #endif
+      printf("entered debug mode\n");
+    }else if (memcmp(argv[1], help_string, strlen(help_string)) == 0) {
+      printf("current launch options:\n");
+      printf("\t--debug to enable debug mode\n");
+      printf("\t--help to print this again!\n");
+    }else{
+      printf("use '--help' for launch parameters!");
+    }
+  }
+
   window_init(init, update, tick, render, shutdown);
   window_updateloop();
   return 0;
