@@ -1,11 +1,9 @@
 #include "glad/gl.h"
 #include <GLFW/glfw3.h>
-#include <math/common.h>
-#include <math/mat4.h>
-#include <math/vec3.h>
 #include "graphics/buffer.h"
 #include "graphics/shader.h"
 #include <graphics/renderer.h>
+#include <math/mat4.h>
 
 struct rect renderer_initrect_tex(float x, float y, float height, float width, Texture texture){
   uint32_t vao = vao_create();
@@ -44,7 +42,7 @@ void renderer_drawrect_tex(struct rect rectangle, struct shader shader){
   mat4_identity(model);
 
   mat4_translate(model, (vec3){rectangle.x, rectangle.y, 0.0f});
-  mat4_scalevf(model, rectangle.height, rectangle.width, 0.0f);
+  mat4_scalev_make(model,(vec3){rectangle.height, rectangle.width, 0.0f});
 
   tex_bind(rectangle.texture);
   shader_setm4x4(shader, "texture0", 0);

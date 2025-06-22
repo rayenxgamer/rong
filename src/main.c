@@ -15,18 +15,18 @@ struct shader textureshader;
 struct camera cam;
 Texture cat, cat2;
 
-float player1x = -1.0f; float player1y = -0.5f;
+float player1x = 320.0f; float player1y = 240.0f;
 float player2x = 0.5f; float player2y = -0.5f;
 
 void init(){
-  cam = camera_init_ortho((vec3){0.0f, 0.0f, 0.0f}, 640, 480, 1000);
+  cam = camera_init_ortho((vec3){0.0f, 0.0f, 0.0f}, 640, 480, 1);
   cat = tex_create("../assets/cat.jpg", true);
-  window_set_attributes(480, 640, "RONG: on the RENGINE!");
+  window_set_attributes(640, 480, "RONG: on the RENGINE!");
   shader = shader_create("../shaders/vs.glsl", "../shaders/fs.glsl");
   textureshader = shader_create("../shaders/textureshaders/vs.glsl", "../shaders/textureshaders/fs.glsl");
 
-  rectangledrawtest = renderer_initrect_tex(player1x, player1y, 1.0f, 1.0f, cat);
-  catrec = renderer_initrect_tex(player2x, player2y, 1.0f, 1.0f, cat);
+  rectangledrawtest = renderer_initrect_tex(player1x, player1y, 100.0f, 100.0f, cat);
+  catrec = renderer_initrect_tex(player2x, player2y, 100.0f, 100.0f, cat);
 };
 
 void render(){
@@ -45,18 +45,18 @@ void tick(){
     window_set_should_close();
 
   if (window_is_pressed(GLFW_KEY_S))
-    rectangledrawtest.y -= PLAYER_VERT_SPEED;
+    catrec.y -= PLAYER_VERT_SPEED;
 
   if (window_is_pressed(GLFW_KEY_W))
-    rectangledrawtest.y += PLAYER_VERT_SPEED;
+    catrec.y += PLAYER_VERT_SPEED;
 
   if (window_is_pressed(GLFW_KEY_K))
-    rectangledrawtest.x -= PLAYER_VERT_SPEED;
+    catrec.x -= PLAYER_VERT_SPEED;
 
   if (window_is_pressed(GLFW_KEY_I))
-    rectangledrawtest.x += PLAYER_VERT_SPEED;
+    catrec.x += PLAYER_VERT_SPEED;
 
-  printf("%f\t%f\n", rectangledrawtest.x, rectangledrawtest.y);
+  printf("%f\t%f\n", catrec.x, catrec.y);
 
   if(aabb_check_collision(rectangledrawtest.x, rectangledrawtest.y, rectangledrawtest.width, rectangledrawtest.height
                        , catrec.x, catrec.y, catrec.width, catrec.height)){

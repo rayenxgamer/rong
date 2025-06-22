@@ -1,4 +1,5 @@
 #include "math/mat4.h"
+#include <math/projection.h>
 #include <graphics/camera.h>
 
 struct camera camera_init_ortho(vec3 pos, float window_width, float window_height, float far){
@@ -20,7 +21,7 @@ void camera_update(struct camera camera){
 void camera_set_projection_ortho(mat4 dest, float const width, float const height, float const far)
 {
   mat4 temp_matrix;
-  rengine_math_ortho(temp_matrix, 0.0f, width, height, 0.0f , 0.1f, far);
+  rengine_math_ortho(temp_matrix, 0.0f, width, height, 0.0f , -1.0f, far);
   memcpy(dest, temp_matrix, sizeof(mat4));
 };
 

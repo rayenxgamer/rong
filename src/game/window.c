@@ -87,7 +87,7 @@ void window_init(RENGINE_FUNC_W init, RENGINE_FUNC_W update, RENGINE_FUNC_W tick
   glfwSwapInterval(1);
 };
 
-void window_set_attributes(int height, int width, char* title){
+void window_set_attributes(int width, int height, char* title){
   glfwSetWindowTitle(window.self, title);
   glfwSetWindowSize(window.self, width, height);
 };

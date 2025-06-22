@@ -111,8 +111,7 @@ static inline void mat4_scale_make(mat4 matrix, float scale){
   }
 }
 
-static inline void mat4_scalev_make(mat4 matrix, vec4 scale_vector){
-  mat4_identity(matrix);
+static inline void mat4_scalev_make(mat4 matrix, vec3 scale_vector){
   matrix[0][0] = scale_vector[0];
   matrix[1][1] = scale_vector[1];
   matrix[2][2] = scale_vector[2];

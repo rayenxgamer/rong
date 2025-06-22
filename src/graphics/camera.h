@@ -1,8 +1,5 @@
 #pragma once
 
-#include "math/mat4.h"
-#include "math/projection.h"
-#include <math/common.h>
 #include <graphics/shader.h>
 #include <GLFW/glfw3.h>
 #include <string.h>
