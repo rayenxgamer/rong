@@ -1,28 +1,26 @@
+#include "graphics/shader.h"
 #include "math/mat4.h"
 #include <math/projection.h>
 #include <graphics/camera.h>
 
-struct camera camera_init_ortho(vec3 pos, float window_width, float window_height, float far){
-  struct camera temp_camera = {.x = pos[0], .y = pos[1], 0.0f};
-  mat4 temp_view_matrix;
-  mat4_identity(temp_view_matrix);
-  mat4_translate(temp_view_matrix, (vec3){-temp_camera.x, -temp_camera.y, 0.0f});
-  memcpy(temp_camera.view_matrix, temp_view_matrix, sizeof(mat4));
+struct ortho_camera camera_init_ortho(vec3 pos, float left, float right, float bottom, float top, float near, float far){
+  struct ortho_camera temp_camera = {.x = pos[0], .y = pos[1], 0.0f};
+  temp_camera.left = left;
+  temp_camera.right = right;
+  temp_camera.bottom = bottom;
+  temp_camera.top = top;
+  temp_camera.near = near;
+  temp_camera.far = far;
 
-  camera_set_projection_ortho(temp_camera.projection_matrix, window_width, window_height, far);
+  mat4_identity(temp_camera.view_matrix);
+
+  rengine_math_ortho(temp_camera.projection_matrix, left, right, bottom, top , near, far);
 
   return temp_camera;
 };
 
-void camera_update(struct camera camera){
-  // TODO:
+void camera_update(struct ortho_camera camera, struct shader shader){
+  shader_setm4x4(shader, "projection", camera.projection_matrix);
+  shader_setm4x4(shader, "view", camera.view_matrix);
+  rengine_math_ortho(camera.projection_matrix, camera.left, camera.right, camera.bottom, camera.top , camera.near, camera.far);
 }
-
-void camera_set_projection_ortho(mat4 dest, float const width, float const height, float const far)
-{
-  mat4 temp_matrix;
-  rengine_math_ortho(temp_matrix, 0.0f, width, height, 0.0f , -1.0f, far);
-  memcpy(dest, temp_matrix, sizeof(mat4));
-};
-
-

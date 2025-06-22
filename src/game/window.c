@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#define DEFAULT_WINDOW_WIDTH 480
+#define DEFAULT_WINDOW_HEIGHT 640
 #define TICK_SPEED 0.020f /* currently ecuvilant to roughly 20 milliseonds per tick */
 
 struct window window;
@@ -104,6 +106,14 @@ bool window_is_pressed(int key){
 void window_set_should_close(){
   glfwSetWindowShouldClose(window.self, true);
 }
+
+float window_get_width(){
+  return window.width;
+};
+
+float window_get_height(){
+  return window.height;
+};
 
 void window_updateloop(){
   _init();

@@ -2,15 +2,13 @@
 
 #include <graphics/shader.h>
 #include <GLFW/glfw3.h>
-#include <string.h>
 
-struct camera {
+struct ortho_camera {
   float x, y, z;
   mat4 view_matrix;
   mat4 projection_matrix;
+  float left, right, bottom, top, near, far;
 };
 
-struct camera camera_init_ortho(vec3 pos, float window_width, float window_height, float far);
-void camera_update(struct camera camera);
-
-void camera_set_projection_ortho(mat4 dest, float const width, float const height, float const far);
+struct ortho_camera camera_init_ortho(vec3 pos, float left, float right, float bottom, float top, float near, float far);
+void camera_update(struct ortho_camera camera, struct shader shader);
