@@ -14,12 +14,12 @@ struct rect renderer_initrect_tex(float x, float y, float height, float width, T
 
   const float vertices_buffer[] = {
     0.0f,1.0f, 0.0f, 0.0f, 1.0f,
-    1.0f,0.0f, 0.0f, 1.0f, 0.0f,
-    0.0f,0.0f, 0.0f, 0.0f, 0.0f,
-
-    0.0f,1.0f, 0.0f, 0.0f, 1.0f,
     1.0f,1.0f, 0.0f, 1.0f, 1.0f,
     1.0f,0.0f, 0.0f, 1.0f, 0.0f,
+
+    0.0f,1.0f, 0.0f, 0.0f, 1.0f,
+    1.0f,0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f,0.0f, 0.0f, 0.0f, 0.0f,
   };
 
 

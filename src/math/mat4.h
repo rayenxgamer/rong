@@ -19,6 +19,14 @@ static inline void mat4_identity(mat4 dest){
   }
 };
 
+static inline void mat4_zero(mat4 matrix){
+  for (int i = 0;i < 4 ; i++) {
+    for (int j = 0; j < 4; j++) {
+      matrix[i][j] = 0.0f;
+    }
+  }
+};
+
 static inline void mat4_dupl(mat4 dest, mat4 matrix){
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {

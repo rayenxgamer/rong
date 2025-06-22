@@ -20,6 +20,7 @@ add_executable(rong
   src/graphics/shader.c
   src/graphics/buffer.c
   src/graphics/texture.c
+  src/graphics/camera.c
 )
 
 #target_compile_options(rong PUBLIC -g)

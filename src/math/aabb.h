@@ -7,10 +7,13 @@
 static inline bool aabb_check_collision(float obj1x, float obj1y, float obj1w, float obj1h,
                                         float obj2x, float obj2y, float obj2w, float obj2h){
   if (obj1x < obj2x + obj2w &&
-      obj1x + obj1w > obj2x &&
-      obj1y < obj2y + obj2h &&
-      obj1y + obj1h > obj2y) {
-    return true;
+      obj1x + obj1w > obj2x){
+    printf("aligned on the X\n");
+     if(obj1y < obj2y + obj2h &&
+        obj1y + obj1h > obj2y){
+
+      return true;
+      }
   }
   return false;
 };

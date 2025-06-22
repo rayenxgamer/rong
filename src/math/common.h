@@ -1,7 +1,5 @@
 #pragma once
 
-#include <stdio.h>
-
 #define PI 3.14159265358979323846
 
 static inline float deg_to_rad(float deg){
