@@ -15,8 +15,8 @@ static void _init(){
   window.w_init();
 }
 
-static void _update(){
-  window.w_update();
+static void _update(float delta_time){
+  window.w_update(delta_time);
   glfwSwapBuffers(window.self);
   glfwPollEvents();
 }
@@ -43,7 +43,7 @@ static void _framebuffer_size_callback(GLFWwindow* window, int width, int height
   glViewport(0, 0, width, height);
 };
 
-void window_init(RENGINE_FUNC_W init, RENGINE_FUNC_W update, RENGINE_FUNC_W tick, RENGINE_FUNC_W render, RENGINE_FUNC_W shutdown){
+void window_init(RENGINE_FUNC_W init, RENGINE_FUNC_W_DT update, RENGINE_FUNC_W tick, RENGINE_FUNC_W render, RENGINE_FUNC_W shutdown){
   window.w_init = init;
   window.w_update = update;
   window.w_tick = tick;
@@ -135,7 +135,7 @@ void window_updateloop(){
     }
 
     _render();
-    _update();
+    _update(dt);
   }
 
   _shutdown();

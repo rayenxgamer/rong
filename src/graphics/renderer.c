@@ -89,7 +89,7 @@ void renderer_drawrect(struct rect rectangle, struct shader shader){
   mat4_identity(model);
 
   mat4_translate(model, (vec3){rectangle.x, rectangle.y, 0.0f});
-  mat4_scalevf(model, rectangle.height, rectangle.width, 0.0f);
+  mat4_scalev_make(model,(vec3){rectangle.height, rectangle.width, 0.0f});
 
   shader_setm4x4(shader, "model", model);
 

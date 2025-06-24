@@ -7,6 +7,9 @@ project(rong
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+option(OPTIMIZATIONS_ENABLED "optimizations enabled" OFF)
+
 # set(OpenGL_GL_PREFERENCE GLVND) #
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/deps)
@@ -16,6 +19,7 @@ add_executable(rong
   src/main.c
   src/game/window.c
   src/input/input.c
+  src/game/ball.c
   src/graphics/renderer.c
   src/graphics/shader.c
   src/graphics/buffer.c
@@ -24,6 +28,11 @@ add_executable(rong
 )
 
 #target_compile_options(rong PUBLIC -g)
+
+if(OPTIMIZATIONS_ENABLED)
+  target_compile_options(rong PUBLIC -O3)
+endif()
+
 
 find_package(glfw3 3.4 QUIET)
 if (NOT glfw3_FOUND)
