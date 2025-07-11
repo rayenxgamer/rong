@@ -134,8 +134,8 @@ void window_updateloop(){
       _tick();
     }
 
-    _render();
     _update(dt);
+    _render();
   }
 
   _shutdown();

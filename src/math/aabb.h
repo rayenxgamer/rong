@@ -4,6 +4,11 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+typedef struct {
+  float x, y;
+  float xh, yw;
+} AABB;
+
 static inline bool aabb_check_collision(float obj1x, float obj1y, float obj1w, float obj1h,
                                         float obj2x, float obj2y, float obj2w, float obj2h){
   if (obj1x < obj2x + obj2w &&

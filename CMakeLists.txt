@@ -66,7 +66,4 @@ if(NOT glad_POPULATED)
     glad_add_library(glad REPRODUCIBLE EXCLUDE_FROM_ALL LOADER API gl:core=3.3)
 endif()
 
-target_link_libraries(rong PUBLIC glad glfw)
-
-
-
+target_link_libraries(rong PUBLIC glad glfw m)

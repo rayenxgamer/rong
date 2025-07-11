@@ -4,6 +4,7 @@
 #include <graphics/buffer.h>
 #include <graphics/shader.h>
 #include <graphics/texture.h>
+#include <math/aabb.h>
 
 struct rect{
   float x,y;
@@ -13,6 +14,9 @@ struct rect{
   uint32_t vbo;
   Texture texture;
 };
+
+void renderer_drawaabbs();
+void renderer_directdrawline(float xstart, float ystart, float xend, float yend, struct shader shader);
 
 struct rect renderer_initrect_tex(float x, float y, float height, float width, Texture texture);
 void renderer_drawrect_tex(struct rect rectangle, struct shader shader);
