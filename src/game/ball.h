@@ -2,11 +2,9 @@
 
 #include <graphics/texture.h>
 #include <graphics/renderer.h>
+#include <math/vec2.h>
 
 struct ball{
-  float x, y;
-  float vel;
+  struct rect ball_rectangle;
+  vec2 vel;
 };
-
-struct ball ball_init(struct rect rectangle, float initial_velocity);
-void ball_update(struct ball ball, struct rect rectangle,float velocity, float gravity, float delta_time);

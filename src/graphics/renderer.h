@@ -10,8 +10,8 @@ struct rect{
   float x,y;
   float height;
   float width;
-  uint32_t vao;
-  uint32_t vbo;
+  uint32_t vao_;
+  uint32_t vbo_;
   Texture texture;
 };
 

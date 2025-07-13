@@ -72,7 +72,7 @@ void renderer_drawrect_tex(struct rect rectangle, struct shader shader){
   shader_setm4x4(shader, "model", model);
 
   /* TODO: code to handle rotation */
-  vao_bind(rectangle.vao);
+  vao_bind(rectangle.vao_);
   glDrawArrays(GL_TRIANGLES, 0, 6);
   return;
 };
@@ -117,7 +117,7 @@ void renderer_drawrect(struct rect rectangle, struct shader shader){
   shader_setm4x4(shader, "model", model);
 
   /* TODO: code to handle rotation */
-  vao_bind(rectangle.vao);
+  vao_bind(rectangle.vao_);
   glDrawArrays(GL_TRIANGLES, 0, 6);
   return;
 };
