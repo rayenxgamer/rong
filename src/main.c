@@ -1,7 +1,10 @@
+#include "glad/gl.h"
 #include <graphics/camera.h>
 #include <graphics/shader.h>
 #include <graphics/texture.h>
 #include <graphics/renderer.h>
+#include <graphics/particlesystem/particle_emmiter.h>
+#include <math/projection.h>
 #include <math/common.h>
 #include <math/aabb.h>
 #include <math/vec2.h>
@@ -17,6 +20,7 @@ struct shader debugshader;
 struct shader textureshader;
 struct ortho_camera cam;
 struct ball ball_properties;
+struct particle particle_default;
 Texture cat, string_ball, twach;
 
 vec2 player1_coords;
@@ -35,8 +39,9 @@ void init(){
   string_ball = tex_create("../assets/string_ball.jpg", true);
   twach = tex_create("../assets/twach.jpg", true);
   window_set_attributes(640, 480, "RONG: on the RENGINE!");
-  debugshader = shader_create("../shaders/vs.glsl", "../shaders/fs.glsl");
-  textureshader = shader_create("../shaders/textureshaders/vs.glsl", "../shaders/textureshaders/fs.glsl");
+
+  shader_create(&debugshader, "../shaders/vs.glsl", "../shaders/fs.glsl");
+  shader_create(&textureshader, "../shaders/textureshaders/vs.glsl", "../shaders/textureshaders/fs.glsl");
 
   ball_rect = renderer_initrect_tex(320.0f, 240.0f, 25.0f, 25.0f, string_ball);
   player1 = renderer_initrect_tex(player1_coords[0], player1_coords[1], 120.0f, 25.0f, cat);
@@ -49,10 +54,22 @@ void render(){
   glClearColor(.0f, .0f, .0f, .0f);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  renderer_drawrect_tex(player1, textureshader);
-  renderer_drawrect_tex(player2, textureshader);
+  particle_default.color = (color){0.1, 0.0, 1.0};
+  particle_default.lifetime = 1.0f;
 
-  renderer_drawrect_tex(ball_rect, textureshader);
+  particle_default.particle_rectangle.x = 320.0f;
+  particle_default.particle_rectangle.y = 240.0f;
+  particle_default.particle_rectangle.height = 100;
+  particle_default.particle_rectangle.width = 100;
+
+  glUseProgram(debugshader.handle);
+  particle_emit(&particle_default, &debugshader);
+
+  glUseProgram(textureshader.handle);
+  renderer_drawrect_tex(player1, &textureshader);
+  renderer_drawrect_tex(player2, &textureshader);
+
+  renderer_drawrect_tex(ball_rect, &textureshader);
 };
 
 void tick(){
@@ -61,8 +78,14 @@ void tick(){
 };
 
 void update(float deltatime){
-  camera_update(cam, textureshader);
-  camera_update(cam, debugshader);
+  glUseProgram(debugshader.handle);
+  glUniformMatrix4fv(glGetUniformLocation(debugshader.handle, "projection"), 1, GL_FALSE, &cam.projection_matrix[0][0]);
+  glUniformMatrix4fv(glGetUniformLocation(debugshader.handle, "view"), 1, GL_FALSE, &cam.view_matrix[0][0]);
+
+  glUseProgram(textureshader.handle);
+  glUniformMatrix4fv(glGetUniformLocation(textureshader.handle, "projection"), 1, GL_FALSE, &cam.projection_matrix[0][0]);
+  glUniformMatrix4fv(glGetUniformLocation(textureshader.handle, "view"), 1, GL_FALSE, &cam.view_matrix[0][0]);
+  rengine_math_ortho(cam.projection_matrix, cam.left, cam.right, cam.bottom, cam.top , cam.near, cam.far);
 
   if (window_is_pressed(GLFW_KEY_S))
     player1.y -= PLAYER_VERT_SPEED;

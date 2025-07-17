@@ -2,8 +2,13 @@
 #include <GLFW/glfw3.h>
 #include "graphics/buffer.h"
 #include "graphics/shader.h"
+#include "graphics/texture.h"
 #include <graphics/renderer.h>
+#include <graphics/defines/colors.h>
 #include <math/mat4.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
 
 void renderer_directdrawline(float xstart, float ystart, float xend, float yend, struct shader shader){
 
@@ -48,37 +53,41 @@ struct rect renderer_initrect_tex(float x, float y, float height, float width, T
   vbo_bind(vbo);
   vbo_buffer(sizeof(vertices_buffer), vertices_buffer, GL_STATIC_DRAW);
 
-  vao_attrib(vao, vbo, 0, 3,  GL_FLOAT,  GL_FALSE,  5 * sizeof(float), (void*)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
-  vao_attrib(vao, vbo, 1, 2, GL_FLOAT,GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
   glEnableVertexAttribArray(1);
 
-  struct rect self = {x, y, height, width, vao, vbo, texture};
-
+  struct rect self;
+  self.x = x;
+  self.y = y;
+  self.height = height;
+  self.width = width;
+  self.texture = texture;
+  self.vao_ = vao;
   return self;
 };
 
-void renderer_drawrect_tex(struct rect rectangle, struct shader shader){
+void renderer_drawrect_tex(struct rect rectangle, struct shader* shader){
   /* rendering code here */
-  shader_bind(shader);
-  mat4 model;
-  mat4_identity(model);
+  mat4 model1;
+  mat4_identity(model1);
 
-  mat4_translate(model, (vec3){rectangle.x, rectangle.y, 0.0f});
-  mat4_scalev_make(model,(vec3){rectangle.width, rectangle.height, 0.0f});
+  mat4_translate(model1, (vec3){rectangle.x, rectangle.y, 0.0f});
+  mat4_scalev_make(model1,(vec3){rectangle.width, rectangle.height, 0.0f});
 
   tex_bind(rectangle.texture);
-  shader_setm4x4(shader, "texture0", 0);
-  shader_setm4x4(shader, "model", model);
+  glUniform1i(glGetUniformLocation(shader->handle, "texture0"), 0);
+  glUniformMatrix4fv(glGetUniformLocation(shader->handle, "model"), 1, GL_FALSE, &model1[0][0]);
 
   /* TODO: code to handle rotation */
-  vao_bind(rectangle.vao_);
+  glActiveTexture(GL_TEXTURE0);
+  tex_bind(rectangle.texture);
+  glBindVertexArray(rectangle.vao_);
   glDrawArrays(GL_TRIANGLES, 0, 6);
-  return;
 };
 
 struct rect renderer_initrect(float x, float y, float height, float width){
-
   uint32_t vao = vao_create();
   uint32_t vbo = vbo_create();
   uint32_t ibo = ibo_create();
@@ -100,21 +109,20 @@ struct rect renderer_initrect(float x, float y, float height, float width){
   vao_attrib(vao, vbo, 0, 3,  GL_FLOAT,  GL_FALSE,  3 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
   struct rect self = {x, y, height, width, vao, vbo};
-
   // more initialization code here
   return self;
 };
 
-void renderer_drawrect(struct rect rectangle, struct shader shader){
+void renderer_drawrect(struct rect rectangle, struct shader* shader){
   /* rendering code here */
-  shader_bind(shader);
+  glUseProgram(shader->handle);
   mat4 model;
   mat4_identity(model);
 
   mat4_translate(model, (vec3){rectangle.x, rectangle.y, 0.0f});
   mat4_scalev_make(model,(vec3){rectangle.height, rectangle.width, 0.0f});
 
-  shader_setm4x4(shader, "model", model);
+  shader_setm4x4(*shader, "model", model);
 
   /* TODO: code to handle rotation */
   vao_bind(rectangle.vao_);
@@ -122,7 +130,45 @@ void renderer_drawrect(struct rect rectangle, struct shader shader){
   return;
 };
 
+void renderer_drawrect_noinit(struct rect* rectangle, color color, struct shader* shader){
+  if (!rectangle->vao_) {
+    uint32_t vao;
+    glGenVertexArrays(1, &vao);
+    uint32_t vbo = vbo_create();
+    uint32_t ibo = ibo_create();
 
+    const float vertices_buffer[] = {
+      0.0f,1.0f, 0.0f,
+      1.0f,0.0f, 0.0f,
+      0.0f,0.0f, 0.0f,
+
+      0.0f, 1.0f, 0.0f,
+      1.0f, 1.0f, 0.0f,
+      1.0f, 0.0f, 0.0f,
+    };
+
+    glBindVertexArray(vao);
+    vbo_bind(vbo);
+    vbo_buffer(sizeof(vertices_buffer), vertices_buffer, GL_STATIC_DRAW);
+
+    vao_attrib(vao, vbo, 0, 3,  GL_FLOAT,  GL_FALSE,  3 * sizeof(float), (void*)0);
+    memcpy(&rectangle->vao_, &vao, sizeof(uint32_t));
+    glEnableVertexAttribArray(0);
+  }
+  /* rendering code here */
+  mat4 model;
+  mat4_identity(model);
+
+  mat4_translate(model, (vec3){rectangle->x, rectangle->y, 0.0f});
+  mat4_scalev_make(model,(vec3){rectangle->height, rectangle->width, 0.0f});
+
+  shader_setf3(*shader, "acolor" ,color.r,color.g, color.b);
+  glUniformMatrix4fv(glGetUniformLocation(shader->handle, "model"), 1, GL_FALSE, &model[0][0]);
+
+  /* TODO: code to handle rotation */
+  glBindVertexArray(rectangle->vao_);
+  glDrawArrays(GL_TRIANGLES, 0, 6);
+};
 
 
 

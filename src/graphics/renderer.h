@@ -1,5 +1,6 @@
 #pragma once
 
+#include <graphics/defines/colors.h>
 #include <glad/gl.h>
 #include <graphics/buffer.h>
 #include <graphics/shader.h>
@@ -19,8 +20,9 @@ void renderer_drawaabbs();
 void renderer_directdrawline(float xstart, float ystart, float xend, float yend, struct shader shader);
 
 struct rect renderer_initrect_tex(float x, float y, float height, float width, Texture texture);
-void renderer_drawrect_tex(struct rect rectangle, struct shader shader);
+void renderer_drawrect_tex(struct rect rectangle, struct shader* shader);
 
 struct rect renderer_initrect(float x, float y, float height, float width);
-void renderer_drawrect(struct rect rectangle, struct shader shader);
+void renderer_drawrect(struct rect rectangle, struct shader* shader);
+void renderer_drawrect_noinit(struct rect *rectangle, color color, struct shader* shader);
 

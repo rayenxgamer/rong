@@ -1,4 +1,5 @@
 #include <graphics/shader.h>
+#include <stdio.h>
 
 static uint32_t shader_checkerrors(uint32_t handle){
   uint32_t success;
@@ -49,29 +50,26 @@ static uint32_t shader_compile(const char *shaderpath, GLenum type){
   return temp_shader_handle;
 }
 
-struct shader shader_create(const char *vpath, const char *fpath){
-  struct shader self;
-
+void shader_create(struct shader* self,const char *vpath, const char *fpath){
   uint32_t success_program;
 
-  self.vs_handle = shader_compile(vpath, GL_VERTEX_SHADER);
-  self.fs_handle = shader_compile(fpath, GL_FRAGMENT_SHADER);
-  self.handle = glCreateProgram();
+  self->vs_handle = shader_compile(vpath, GL_VERTEX_SHADER);
+  self->fs_handle = shader_compile(fpath, GL_FRAGMENT_SHADER);
+  self->handle = glCreateProgram();
 
-  glAttachShader(self.handle, self.vs_handle);
-  glAttachShader(self.handle, self.fs_handle);
-  glLinkProgram(self.handle);
+  glAttachShader(self->handle, self->vs_handle);
+  glAttachShader(self->handle, self->fs_handle);
+  glLinkProgram(self->handle);
 
-  glGetProgramiv(self.handle, GL_LINK_STATUS, (int*)&success_program);
+  glGetProgramiv(self->handle, GL_LINK_STATUS, (int*)&success_program);
   if (!success_program) {
     char info_program_log[512];
-    glGetProgramInfoLog(self.handle, sizeof(info_program_log), NULL, info_program_log);
+    glGetProgramInfoLog(self->handle, sizeof(info_program_log), NULL, info_program_log);
+    printf("%s\n", info_program_log);
   }
 
-  glDeleteShader(self.vs_handle);
-  glDeleteShader(self.fs_handle);
-
-  return self;
+  glDeleteShader(self->vs_handle);
+  glDeleteShader(self->fs_handle);
 };
 
 void shader_bind(struct shader self){
@@ -100,6 +98,10 @@ void shader_setv4(struct shader shader, const char* name, vec4 value){
 
 void shader_setv3(struct shader shader, const char* name, vec3 value){
   glUniform3fv(glGetUniformLocation(shader.handle, name),1, &value[0]);
+};
+
+void shader_setf3(struct shader shader, const char* name, float value1, float value2, float value3){
+  glUniform3f(glGetUniformLocation(shader.handle, name), value1, value2, value3);
 };
 
 void shader_setm4x4(struct shader shader, const char* name, mat4 value){

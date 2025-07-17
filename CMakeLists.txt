@@ -25,14 +25,14 @@ add_executable(rong
   src/graphics/buffer.c
   src/graphics/texture.c
   src/graphics/camera.c
+  src/graphics/particlesystem/particle_emmiter.c
 )
 
-#target_compile_options(rong PUBLIC -g)
+target_compile_options(rong PUBLIC -g)
 
 if(OPTIMIZATIONS_ENABLED)
   target_compile_options(rong PUBLIC -O3)
 endif()
-
 
 find_package(glfw3 3.4 QUIET)
 if (NOT glfw3_FOUND)
