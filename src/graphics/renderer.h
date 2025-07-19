@@ -24,5 +24,7 @@ void renderer_drawrect_tex(struct rect rectangle, struct shader* shader);
 
 struct rect renderer_initrect(float x, float y, float height, float width);
 void renderer_drawrect(struct rect rectangle, struct shader* shader);
-void renderer_drawrect_noinit(struct rect *rectangle, color color, struct shader* shader);
+
+struct rect renderer_init_particles(struct rect *rectangle, color color, struct shader* shader);
+void renderer_drawrect_particle(struct rect *rectangle, color color, struct shader* shader);
 

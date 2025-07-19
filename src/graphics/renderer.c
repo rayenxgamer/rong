@@ -130,46 +130,53 @@ void renderer_drawrect(struct rect rectangle, struct shader* shader){
   return;
 };
 
-void renderer_drawrect_noinit(struct rect* rectangle, color color, struct shader* shader){
-  if (!rectangle->vao_) {
-    uint32_t vao;
-    glGenVertexArrays(1, &vao);
-    uint32_t vbo = vbo_create();
-    uint32_t ibo = ibo_create();
+struct rect renderer_init_particles(struct rect* rectangle, color color, struct shader* shader){
+  glGenVertexArrays(1, &rectangle->vao_);
+  uint32_t vbo = vbo_create();
+  uint32_t ibo = ibo_create();
 
-    const float vertices_buffer[] = {
-      0.0f,1.0f, 0.0f,
-      1.0f,0.0f, 0.0f,
-      0.0f,0.0f, 0.0f,
+  const float vertices_buffer[] = {
+    0.0f,1.0f, 0.0f,
+    1.0f,0.0f, 0.0f,
+    0.0f,0.0f, 0.0f,
 
-      0.0f, 1.0f, 0.0f,
-      1.0f, 1.0f, 0.0f,
-      1.0f, 0.0f, 0.0f,
-    };
+    0.0f, 1.0f, 0.0f,
+    1.0f, 1.0f, 0.0f,
+    1.0f, 0.0f, 0.0f,
+  };
 
-    glBindVertexArray(vao);
-    vbo_bind(vbo);
-    vbo_buffer(sizeof(vertices_buffer), vertices_buffer, GL_STATIC_DRAW);
+  glBindVertexArray(rectangle->vao_);
+  vbo_bind(rectangle->vao_);
+  vbo_buffer(sizeof(vertices_buffer), vertices_buffer, GL_STATIC_DRAW);
 
-    vao_attrib(vao, vbo, 0, 3,  GL_FLOAT,  GL_FALSE,  3 * sizeof(float), (void*)0);
-    memcpy(&rectangle->vao_, &vao, sizeof(uint32_t));
-    glEnableVertexAttribArray(0);
-  }
+  vao_attrib(rectangle->vao_, vbo, 0, 3,  GL_FLOAT,  GL_FALSE,  3 * sizeof(float), (void*)0);
+  glEnableVertexAttribArray(0);
+
+  return *rectangle;
+}
+
+void renderer_drawrect_particle(struct rect* rectangle, color color, struct shader* shader){
   /* rendering code here */
-  mat4 model;
-  mat4_identity(model);
+  mat4 model1;
+  mat4_identity(model1);
 
-  mat4_translate(model, (vec3){rectangle->x, rectangle->y, 0.0f});
-  mat4_scalev_make(model,(vec3){rectangle->height, rectangle->width, 0.0f});
+  mat4_translate(model1, (vec3){rectangle->x, rectangle->y, 0.0f});
+  mat4_scalev_make(model1,(vec3){rectangle->width, rectangle->height, 0.0f});
 
-  shader_setf3(*shader, "acolor" ,color.r,color.g, color.b);
-  glUniformMatrix4fv(glGetUniformLocation(shader->handle, "model"), 1, GL_FALSE, &model[0][0]);
+  tex_bind(rectangle->texture);
+  glUniform1i(glGetUniformLocation(shader->handle, "texture0"), 0);
+  glUniformMatrix4fv(glGetUniformLocation(shader->handle, "model"), 1, GL_FALSE, &model1[0][0]);
+  glUniform1f(glGetUniformLocation(shader->handle, "color"), color.a);
 
   /* TODO: code to handle rotation */
+  glActiveTexture(GL_TEXTURE0);
+  tex_bind(rectangle->texture);
   glBindVertexArray(rectangle->vao_);
+
+ glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
   glDrawArrays(GL_TRIANGLES, 0, 6);
+  glDisable(GL_BLEND);
 };
-
-
-
-

@@ -10,6 +10,8 @@
 #include <math/vec2.h>
 #include <game/ball.h>
 #include <game/window.h>
+#include <stdio.h>
+#include <string.h>
 #include <time.h>
 
 #define PLAYER_VERT_SPEED 8.0f
@@ -20,11 +22,15 @@ struct shader debugshader;
 struct shader textureshader;
 struct ortho_camera cam;
 struct ball ball_properties;
+struct particle_list_node* head;
 struct particle particle_default;
 Texture cat, string_ball, twach;
+Texture star_particle;
 
 vec2 player1_coords;
 vec2 player2_coords;
+
+unsigned int total_tick_count = 0;
 
 void init(){
   player1_coords[0] = 590.0f; player1_coords[1] = 180.0f;
@@ -36,16 +42,32 @@ void init(){
 
   cam = camera_init_ortho((vec3){0.0f, 0.0f, 0.0f}, 0.0f, 640.0f, 0.0f, 480.0f, -1.0f, 1.0f);
   cat = tex_create("../assets/cat.jpg", true);
-  string_ball = tex_create("../assets/string_ball.jpg", true);
+  string_ball = tex_create("../assets/sprites/string_ball.png", true);
   twach = tex_create("../assets/twach.jpg", true);
+  star_particle = tex_create("../assets/sprites/star_particle.png", true);
   window_set_attributes(640, 480, "RONG: on the RENGINE!");
+
+  particle_default.color = (color){0.5, .0, 0.5, 1.0};
+  particle_default.lifetime = 1.0f;
+
+  particle_default.particle_rectangle.x = 320.0f;
+  particle_default.particle_rectangle.y = 240.0f;
+  particle_default.particle_rectangle.height = 25;
+  particle_default.particle_rectangle.width = 25;
+
+  particle_default.particle_rectangle = renderer_initrect_tex(particle_default.particle_rectangle.x,particle_default.particle_rectangle.y,
+                                                              particle_default.particle_rectangle.height, particle_default.particle_rectangle.width,
+                                                              star_particle);
+  head = malloc(sizeof(struct particle_list_node));
+  head->data = particle_default;
+  head->next = NULL;
 
   shader_create(&debugshader, "../shaders/vs.glsl", "../shaders/fs.glsl");
   shader_create(&textureshader, "../shaders/textureshaders/vs.glsl", "../shaders/textureshaders/fs.glsl");
 
   ball_rect = renderer_initrect_tex(320.0f, 240.0f, 25.0f, 25.0f, string_ball);
-  player1 = renderer_initrect_tex(player1_coords[0], player1_coords[1], 120.0f, 25.0f, cat);
-  player2 = renderer_initrect_tex(player2_coords[0], player2_coords[1], 120.0f, 25.0f, twach);
+  player1 = renderer_initrect_tex(player1_coords[0], player1_coords[1], 120.0f, 30.0f, cat);
+  player2 = renderer_initrect_tex(player2_coords[0], player2_coords[1], 120.0f, 30.0f, twach);
 
   ball_properties.ball_rectangle = &ball_rect;
 };
@@ -54,27 +76,27 @@ void render(){
   glClearColor(.0f, .0f, .0f, .0f);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  particle_default.color = (color){0.1, 0.0, 1.0};
-  particle_default.lifetime = 1.0f;
-
-  particle_default.particle_rectangle.x = 320.0f;
-  particle_default.particle_rectangle.y = 240.0f;
-  particle_default.particle_rectangle.height = 100;
-  particle_default.particle_rectangle.width = 100;
-
-  glUseProgram(debugshader.handle);
-  particle_emit(&particle_default, &debugshader);
 
   glUseProgram(textureshader.handle);
+  particles_update(head, &textureshader);
+  particles_emit(head, &textureshader);
+
   renderer_drawrect_tex(player1, &textureshader);
   renderer_drawrect_tex(player2, &textureshader);
 
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   renderer_drawrect_tex(ball_rect, &textureshader);
+  glDisable(GL_BLEND);
 };
 
 void tick(){
   if(window_is_pressed(GLFW_KEY_ESCAPE))
     window_set_should_close();
+
+  total_tick_count++;
+  if (total_tick_count >= 2) {
+  }
 };
 
 void update(float deltatime){
@@ -110,6 +132,10 @@ void update(float deltatime){
 
   ball_update(&ball_properties, deltatime);
   ball_do_collisions(&ball_properties, &player1, &player2);
+
+  head->data = particle_default;
+  head->data.particle_rectangle.x = ball_properties.ball_rectangle->x;
+  head->data.particle_rectangle.y = ball_properties.ball_rectangle->y;
 
   if (player1.y + player1.height >= 480.0f){
     player1.y = 480.0f - player1.height;

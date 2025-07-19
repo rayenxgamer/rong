@@ -17,16 +17,15 @@ void vao_bind(uint32_t vao){
 void vao_attrib(uint32_t vao, uint32_t vbo, GLuint index, GLint size
 ,GLenum type, GLboolean normalized, GLsizei stride,void* offset){
 
-  if (vao < 0)
+  if (!vao)
     printf("invalid vao!\n");
   vao_bind(vao);
-  if (vbo < 0)
+  if (!vbo)
     printf("invalid vbo!\n");
 
   switch (type) {
     case GL_FLOAT:
       glVertexAttribPointer(index, size, type, normalized, stride, offset);
-      printf("you chose glFLoat! congrats! you're basic asf\n");
     case GL_INT:
       glVertexAttribIPointer(index, size, normalized, stride, (GLvoid*)offset);
     case GL_BYTE:
@@ -40,7 +39,7 @@ void vao_attrib(uint32_t vao, uint32_t vbo, GLuint index, GLint size
       glVertexAttribIPointer(index, size, normalized, stride, (GLvoid*)offset);
     case GL_UNSIGNED_INT_2_10_10_10_REV:
     default:
-      printf("enter a proper type for the vao!\n");
+      glVertexAttribPointer(index, size, type, normalized, stride, offset);
   }
   glEnableVertexAttribArray(index);
 };
