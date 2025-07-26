@@ -4,7 +4,7 @@
 #include <graphics/renderer.h>
 #include <math/vec2.h>
 
-#define MAX_BALL_VELOCITY_X 7.0f
+#define MAX_BALL_VELOCITY_X 8.0f
 #define MAX_BALL_VELOCITY_Y 5.0f
 
 struct ball{

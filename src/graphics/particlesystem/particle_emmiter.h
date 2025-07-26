@@ -10,7 +10,10 @@
 struct particle {
   struct rect particle_rectangle;
   color color;
-  float lifetime;
+  float size_start, size_end;
+  float lifetime, lifetime_left;
+  vec2 velocity, velocity_change;
+  Texture texture;
 };
 
 struct particle_list_node {
@@ -26,5 +29,3 @@ struct particle_list_node* particle_list_node_delete_middle(struct particle_list
 void particle_emit_(struct particle* particle, struct shader* shader);
 void particles_emit(struct particle_list_node* head,struct shader* shader);
 void particles_update(struct particle_list_node* head, struct shader* shader);
-
-/* make particle header actually have structs and function definitions?? */
