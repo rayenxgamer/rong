@@ -101,7 +101,7 @@ struct rect renderer_initrect(float x, float y, float height, float width){
     1.0f, 1.0f, 0.0f,
     1.0f, 0.0f, 0.0f,
   };
-
+  
   vao_bind(vao);
   vbo_bind(vbo);
   vbo_buffer(sizeof(vertices_buffer), vertices_buffer, GL_STATIC_DRAW);
@@ -173,10 +173,49 @@ void renderer_drawrect_particle(struct rect* rectangle, color color, struct shad
   tex_bind(rectangle->texture);
   glBindVertexArray(rectangle->vao_);
 
- glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-
   glDrawArrays(GL_TRIANGLES, 0, 6);
-  glDisable(GL_BLEND);
 };
+
+background_props renderer_initbackground(background_props props){
+  uint32_t vao = vao_create();
+   uint32_t vbo = vbo_create();
+
+  const float vertices_buffer[] = {
+    0.0f,1.0f, 0.0f, 0.0f, 1.0f,
+    1.0f,1.0f, 0.0f, 1.0f, 1.0f,
+    1.0f,0.0f, 0.0f, 1.0f, 0.0f,
+
+    0.0f,1.0f, 0.0f, 0.0f, 1.0f,
+    1.0f,0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f,0.0f, 0.0f, 0.0f, 0.0f,
+  };
+
+  vao_bind(vao);
+  vbo_bind(vbo);
+  vbo_buffer(sizeof(vertices_buffer), vertices_buffer, GL_STATIC_DRAW);
+
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+  glEnableVertexAttribArray(1);
+
+  return (background_props){props.window_height, props.window_width, props.texture2D, vao};
+}
+
+void renderer_drawbackground(background_props* props ,struct shader* shader){
+  mat4 model;
+  mat4_identity(model);
+
+  mat4_translate(model, (vec3){0, 0, 0.0f});
+  mat4_scalev_make(model,(vec3){props->window_width, props->window_height, 0.0f});
+
+  tex_bind(props->texture2D);
+  glUniform1i(glGetUniformLocation(shader->handle, "texture0"), 0);
+  glUniformMatrix4fv(glGetUniformLocation(shader->handle, "model"), 1, GL_FALSE, &model[0][0]);
+  
+  glActiveTexture(GL_TEXTURE0);
+  tex_bind(props->texture2D);
+  
+  glBindVertexArray(props->vao);
+  glDrawArrays(GL_TRIANGLES, 0, 6); 
+}

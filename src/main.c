@@ -13,18 +13,21 @@
 #include <string.h>
 #include <time.h>
 
-#define PLAYER_VERT_SPEED 8.0f
+#define PLAYER_VERT_SPEED 6.0f
 #define GRAVITY -1.0f
 
+background_props bprops;
 struct rect player1, player2, ball_rect;
 struct rect background_rect;
 struct shader debugshader;
 struct shader textureshader;
+struct shader particleshader;
 struct ortho_camera cam;
 struct ball ball_properties;
 struct particle_list_node* head;
 struct particle particle_default;
-Texture loafer, string_ball, twach, background;
+
+Texture loafer, string_ball, twach, bg_texture;
 Texture star_particle;
 
 vec2 player1_coords;
@@ -41,10 +44,14 @@ void init(){
   ball_properties.vel[1] = rand_range(-5, 5);
 
   cam = camera_init_ortho((vec3){0.0f, 0.0f, 0.0f}, 0.0f, 640.0f, 0.0f, 480.0f, -1.0f, 1.0f);
+    bg_texture = tex_create("../assets/sprites/level_background_purpur-dreams.png", true);
   loafer = tex_create("../assets/sprites/player_loafer.png", true);
   string_ball = tex_create("../assets/sprites/string_ball.png", true);
   twach = tex_create("../assets/sprites/player_twach.png", true);
   star_particle = tex_create("../assets/sprites/star_purple_remastered_firstiteration.png", true);
+  
+    bprops = renderer_initbackground((background_props){480.0f, 640.0f, bg_texture});
+  
   window_set_attributes(640, 480, "RONG: on the RENGINE!");
 
   particle_default.color = (color){0.5, .0, 0.5, 1.0};
@@ -64,6 +71,7 @@ void init(){
 
   shader_create(&debugshader, "../shaders/vs.glsl", "../shaders/fs.glsl");
   shader_create(&textureshader, "../shaders/textureshaders/vs.glsl", "../shaders/textureshaders/fs.glsl");
+  shader_create(&particleshader, "../shaders/particleshader/vs.glsl", "../shaders/particleshader/fs.glsl");
 
   ball_rect = renderer_initrect_tex(320.0f, 240.0f, 25.0f, 25.0f, string_ball);
   player1 = renderer_initrect_tex(player1_coords[0], player1_coords[1], 120.0f, 25.0f, twach);
@@ -77,15 +85,21 @@ void render(){
   glClear(GL_COLOR_BUFFER_BIT);
 
   glUseProgram(textureshader.handle);
-  particles_update(head, &textureshader);
-
-  renderer_drawrect_tex(player2, &textureshader);
-  renderer_drawrect_tex(player1, &textureshader);
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  renderer_drawbackground(&bprops, &textureshader);
   renderer_drawrect_tex(ball_rect, &textureshader);
-  glDisable(GL_BLEND);
+
+  glUseProgram(particleshader.handle);
+  particles_update(head, &particleshader);
+
+
+   glUseProgram(textureshader.handle);
+  renderer_drawrect_tex(player2, &textureshader);
+  renderer_drawrect_tex(player1, &textureshader);
+ glDisable(GL_BLEND);
+ 
 };
 
 void tick(){
@@ -108,7 +122,14 @@ void update(float deltatime){
   glUseProgram(textureshader.handle);
   glUniformMatrix4fv(glGetUniformLocation(textureshader.handle, "projection"), 1, GL_FALSE, &cam.projection_matrix[0][0]);
   glUniformMatrix4fv(glGetUniformLocation(textureshader.handle, "view"), 1, GL_FALSE, &cam.view_matrix[0][0]);
+  
+  glUseProgram(particleshader.handle);
+  glUniformMatrix4fv(glGetUniformLocation(particleshader.handle, "projection"), 1, GL_FALSE, &cam.projection_matrix[0][0]);
+  glUniformMatrix4fv(glGetUniformLocation(particleshader.handle, "view"), 1, GL_FALSE, &cam.view_matrix[0][0]);
+
   rengine_math_ortho(cam.projection_matrix, cam.left, cam.right, cam.bottom, cam.top , cam.near, cam.far);
+
+  
 
   if (window_is_pressed(GLFW_KEY_S))
     player1.y -= PLAYER_VERT_SPEED;

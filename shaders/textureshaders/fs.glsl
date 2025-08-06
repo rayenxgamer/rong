@@ -8,7 +8,7 @@ uniform float color;
 uniform sampler2D texture0;
 
 void main(){
-  vec4 texture_data = texture(texture0, TexCoords);
-  FragColor = vec4(texture_data.rgb, color);
+  FragColor = texture(texture0, TexCoords);
+  // FragColor = vec4(texture_data.rgb, color);
   // FragColor = vec4(1.0f,1.0f,1.0f,1.0f);
 };

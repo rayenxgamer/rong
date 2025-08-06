@@ -16,8 +16,17 @@ struct rect{
   Texture texture;
 };
 
+typedef struct {
+  float window_height, window_width;
+  Texture texture2D;
+  uint32_t vao;
+} background_props;
+
 void renderer_drawaabbs();
 void renderer_directdrawline(float xstart, float ystart, float xend, float yend, struct shader shader);
+
+background_props renderer_initbackground(background_props props);
+void renderer_drawbackground(background_props* props ,struct shader* shader);
 
 struct rect renderer_initrect_tex(float x, float y, float height, float width, Texture texture);
 void renderer_drawrect_tex(struct rect rectangle, struct shader* shader);
