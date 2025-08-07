@@ -36,8 +36,8 @@ vec2 player2_coords;
 unsigned int total_tick_count = 0;
 
 void init(){
-  player1_coords[0] = 590.0f; player1_coords[1] = 180.0f;
-  player2_coords[0] = 25.0f; player2_coords[1] = 180.0f;
+  vec2_copy(player1_coords, (vec2){590.0f, 180.0f});
+  vec2_copy(player2_coords, (vec2){25.0f, 180.0f});
 
   srand(time(NULL));
   ball_properties.vel[0] = rand_range(-5, 5);
@@ -50,11 +50,11 @@ void init(){
   twach = tex_create("../assets/sprites/player_twach.png", true);
   star_particle = tex_create("../assets/sprites/star_purple_remastered_firstiteration.png", true);
   
-    bprops = renderer_initbackground((background_props){480.0f, 640.0f, bg_texture});
+  bprops = renderer_initbackground((background_props){480.0f, 640.0f, bg_texture});
   
   window_set_attributes(640, 480, "RONG: on the RENGINE!");
 
-  particle_default.color = (color){0.5, .0, 0.5, 1.0};
+  particle_default.color = (color){.0, .0, .0, 1.0};
   particle_default.lifetime = 1.0f;
 
   particle_default.particle_rectangle.x = 320.0f;
@@ -65,6 +65,7 @@ void init(){
   particle_default.particle_rectangle = renderer_initrect_tex(particle_default.particle_rectangle.x,particle_default.particle_rectangle.y,
                                                               particle_default.particle_rectangle.height, particle_default.particle_rectangle.width,
                                                               star_particle);
+  
   head = malloc(sizeof(struct particle_list_node));
   head->data = particle_default;
   head->next = NULL;
@@ -94,12 +95,10 @@ void render(){
   glUseProgram(particleshader.handle);
   particles_update(head, &particleshader);
 
-
-   glUseProgram(textureshader.handle);
+  glUseProgram(textureshader.handle);
   renderer_drawrect_tex(player2, &textureshader);
-  renderer_drawrect_tex(player1, &textureshader);
+ renderer_drawrect_tex(player1, &textureshader);
  glDisable(GL_BLEND);
- 
 };
 
 void tick(){
@@ -115,21 +114,11 @@ void tick(){
 };
 
 void update(float deltatime){
-  glUseProgram(debugshader.handle);
-  glUniformMatrix4fv(glGetUniformLocation(debugshader.handle, "projection"), 1, GL_FALSE, &cam.projection_matrix[0][0]);
-  glUniformMatrix4fv(glGetUniformLocation(debugshader.handle, "view"), 1, GL_FALSE, &cam.view_matrix[0][0]);
-
-  glUseProgram(textureshader.handle);
-  glUniformMatrix4fv(glGetUniformLocation(textureshader.handle, "projection"), 1, GL_FALSE, &cam.projection_matrix[0][0]);
-  glUniformMatrix4fv(glGetUniformLocation(textureshader.handle, "view"), 1, GL_FALSE, &cam.view_matrix[0][0]);
-  
-  glUseProgram(particleshader.handle);
-  glUniformMatrix4fv(glGetUniformLocation(particleshader.handle, "projection"), 1, GL_FALSE, &cam.projection_matrix[0][0]);
-  glUniformMatrix4fv(glGetUniformLocation(particleshader.handle, "view"), 1, GL_FALSE, &cam.view_matrix[0][0]);
+  camera_update(cam, &debugshader);
+  camera_update(cam, &textureshader);
+  camera_update(cam, &particleshader);
 
   rengine_math_ortho(cam.projection_matrix, cam.left, cam.right, cam.bottom, cam.top , cam.near, cam.far);
-
-  
 
   if (window_is_pressed(GLFW_KEY_S))
     player1.y -= PLAYER_VERT_SPEED;
@@ -199,3 +188,4 @@ int main(int argc, char* argv[]) {
   window_updateloop();
   return 0;
 };
+

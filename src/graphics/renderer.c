@@ -1,8 +1,7 @@
-#include "glad/gl.h"
-#include <GLFW/glfw3.h>
-#include "graphics/buffer.h"
-#include "graphics/shader.h"
-#include "graphics/texture.h"
+#include <glad/gl.h>
+#include <graphics/buffer.h>
+#include <graphics/shader.h>
+#include <graphics/texture.h>
 #include <graphics/renderer.h>
 #include <graphics/defines/colors.h>
 #include <math/mat4.h>

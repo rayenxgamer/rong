@@ -19,8 +19,8 @@ struct ortho_camera camera_init_ortho(vec3 pos, float left, float right, float b
   return temp_camera;
 };
 
-void camera_update(struct ortho_camera camera, struct shader shader){
-  shader_setm4x4(shader, "projection", camera.projection_matrix);
-  shader_setm4x4(shader, "view", camera.view_matrix);
-  rengine_math_ortho(camera.projection_matrix, camera.left, camera.right, camera.bottom, camera.top , camera.near, camera.far);
+void camera_update(struct ortho_camera camera, struct shader* shader){
+  shader_bind(*shader);
+  shader_setm4x4(*shader, "projection", camera.projection_matrix);
+  shader_setm4x4(*shader, "view", camera.view_matrix);
 }

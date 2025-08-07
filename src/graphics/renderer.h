@@ -1,7 +1,6 @@
 #pragma once
 
 #include <graphics/defines/colors.h>
-#include <glad/gl.h>
 #include <graphics/buffer.h>
 #include <graphics/shader.h>
 #include <graphics/texture.h>
