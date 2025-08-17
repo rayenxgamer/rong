@@ -52,7 +52,7 @@ Texture tex_create(const char* path, bool flipped){
   glGenerateMipmap(GL_TEXTURE_2D);
   stbi_image_free(data);
 
-  Texture self = {textureHandle, path, flipped};
+  Texture self = {textureHandle, path, flipped, height, width};
   return self;
 }
 

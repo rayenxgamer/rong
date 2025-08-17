@@ -25,6 +25,7 @@ add_executable(rong
   src/graphics/buffer.c
   src/graphics/texture.c
   src/graphics/camera.c
+  src/graphics/atlas/atlas.c
   src/graphics/particlesystem/particle_emmiter.c
 )
 
@@ -43,7 +44,13 @@ if (NOT glfw3_FOUND)
   )
   FetchContent_GetProperties(glfw3)
   if(NOT glfw3_POPULATED)
+
   set(FETCHCONTENT_QUIET NO)
+  #[[ you can toggle these to have either wayland or X11 support, useful for systems
+  which were setup without one of them ]]
+  set(GLFW_BUILD_WAYLAND 0)
+  set(GLFW_BUILD_X11 1)
+
   FetchContent_MakeAvailable(glfw3)
   endif()
 endif()

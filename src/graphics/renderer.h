@@ -1,6 +1,7 @@
 #pragma once
 
 #include <graphics/defines/colors.h>
+#include <graphics/atlas/atlas.h>
 #include <graphics/buffer.h>
 #include <graphics/shader.h>
 #include <graphics/texture.h>
@@ -36,3 +37,5 @@ void renderer_drawrect(struct rect rectangle, struct shader* shader);
 struct rect renderer_init_particles(struct rect *rectangle, color color, struct shader* shader);
 void renderer_drawrect_particle(struct rect *rectangle, color color, struct shader* shader);
 
+struct rect renderer_initatlas(Atlas atlas, vec4 position , float x, float y, float height, float width);
+void renderer_drawfromatlas(Atlas atlas,struct rect* rectangle , struct shader* shader);

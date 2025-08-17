@@ -2,6 +2,7 @@
 #include <graphics/shader.h>
 #include <graphics/texture.h>
 #include <graphics/renderer.h>
+#include <graphics/atlas/atlas.h>
 #include <graphics/particlesystem/particle_emmiter.h>
 #include <math/projection.h>
 #include <math/common.h>
@@ -26,6 +27,9 @@ struct ortho_camera cam;
 struct ball ball_properties;
 struct particle_list_node* head;
 struct particle particle_default;
+Atlas font_atlas;
+struct rect font_atlas_rect;
+Texture font_atlas_texture;
 
 Texture loafer, string_ball, twach, bg_texture;
 Texture star_particle;
@@ -44,14 +48,27 @@ void init(){
   ball_properties.vel[1] = rand_range(-5, 5);
 
   cam = camera_init_ortho((vec3){0.0f, 0.0f, 0.0f}, 0.0f, 640.0f, 0.0f, 480.0f, -1.0f, 1.0f);
-    bg_texture = tex_create("../assets/sprites/level_background_purpur-dreams.png", true);
+
+  bg_texture = tex_create("../assets/sprites/level_background_purpur-dreams.png", true);
   loafer = tex_create("../assets/sprites/player_loafer.png", true);
   string_ball = tex_create("../assets/sprites/string_ball.png", true);
   twach = tex_create("../assets/sprites/player_twach.png", true);
   star_particle = tex_create("../assets/sprites/star_purple_remastered_firstiteration.png", true);
-  
+  font_atlas_texture = tex_create("../assets/fonts/font.png", true);
+
+  font_atlas = (Atlas){
+    .texture = &font_atlas_texture,
+    .size_x_ = 8,
+    .size_y_ = 8
+  };
+
+  vec4 position;
+  atlas_get_texture_at(&font_atlas, position, 0, 13);
+  font_atlas_rect = renderer_initatlas(font_atlas, position,
+                                    300.0f, 240.0f, 50, 50);
+
   bprops = renderer_initbackground((background_props){480.0f, 640.0f, bg_texture});
-  
+
   window_set_attributes(640, 480, "RONG: on the RENGINE!");
 
   particle_default.color = (color){.0, .0, .0, 1.0};
@@ -65,7 +82,7 @@ void init(){
   particle_default.particle_rectangle = renderer_initrect_tex(particle_default.particle_rectangle.x,particle_default.particle_rectangle.y,
                                                               particle_default.particle_rectangle.height, particle_default.particle_rectangle.width,
                                                               star_particle);
-  
+
   head = malloc(sizeof(struct particle_list_node));
   head->data = particle_default;
   head->next = NULL;
@@ -97,8 +114,11 @@ void render(){
 
   glUseProgram(textureshader.handle);
   renderer_drawrect_tex(player2, &textureshader);
- renderer_drawrect_tex(player1, &textureshader);
- glDisable(GL_BLEND);
+  renderer_drawrect_tex(player1, &textureshader);
+
+  renderer_drawfromatlas(font_atlas, &font_atlas_rect, &textureshader);
+  glDisable(GL_BLEND);
+
 };
 
 void tick(){

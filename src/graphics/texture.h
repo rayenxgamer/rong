@@ -10,6 +10,7 @@ typedef struct {
   uint32_t handle;
   const char* path;
   bool flipped;
+  float height, width;
 } Texture;
 
 Texture tex_create(const char* path, bool flipped);

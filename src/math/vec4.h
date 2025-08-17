@@ -51,7 +51,7 @@ static inline void vec4_dot(float dest, vec4 const a, vec4 const b){
 };
 
 static inline void vec4_print(vec4 vector){
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < 4; i++) {
     printf("%f\n", vector[i]);
   };
 };

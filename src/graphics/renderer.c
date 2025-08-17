@@ -1,13 +1,8 @@
-#include <glad/gl.h>
-#include <graphics/buffer.h>
-#include <graphics/shader.h>
-#include <graphics/texture.h>
+#include "graphics/buffer.h"
+#include "math/mat4.h"
+#include "math/vec2.h"
 #include <graphics/renderer.h>
-#include <graphics/defines/colors.h>
-#include <math/mat4.h>
-#include <stdint.h>
 #include <stdio.h>
-#include <string.h>
 
 void renderer_directdrawline(float xstart, float ystart, float xend, float yend, struct shader shader){
 
@@ -100,7 +95,7 @@ struct rect renderer_initrect(float x, float y, float height, float width){
     1.0f, 1.0f, 0.0f,
     1.0f, 0.0f, 0.0f,
   };
-  
+
   vao_bind(vao);
   vbo_bind(vbo);
   vbo_buffer(sizeof(vertices_buffer), vertices_buffer, GL_STATIC_DRAW);
@@ -211,10 +206,85 @@ void renderer_drawbackground(background_props* props ,struct shader* shader){
   tex_bind(props->texture2D);
   glUniform1i(glGetUniformLocation(shader->handle, "texture0"), 0);
   glUniformMatrix4fv(glGetUniformLocation(shader->handle, "model"), 1, GL_FALSE, &model[0][0]);
-  
+
   glActiveTexture(GL_TEXTURE0);
   tex_bind(props->texture2D);
-  
+
   glBindVertexArray(props->vao);
-  glDrawArrays(GL_TRIANGLES, 0, 6); 
+  glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+
+struct rect renderer_initatlas(Atlas atlas, vec4 position, float x, float y, float height, float width){
+  uint32_t vao = vao_create();
+   uint32_t vbo = vbo_create();
+
+  printf("%f\n", position[0]);
+  printf("%f\n", position[1]);
+  printf("%f\n", position[2]);
+  printf("%f\n", position[3]);
+
+
+  const float vertices_buffer[] = {
+    // 0.0f,1.0f, 0.0f, position[0], position[3], // top left
+    // 1.0f,1.0f, 0.0f, position[2], position[3], // top right
+    // 1.0f,0.0f, 0.0f, position[2], position[1], // bottom right
+    //
+    // 0.0f,1.0f, 0.0f, position[0], position[3], // top left
+    // 0.0f,0.0f, 0.0f, position[0], position[1], // bottom left
+    // 1.0f,0.0f, 0.0f, position[2], position[1], // bottom right
+
+    // 0.0f,1.0f, 0.0f, position[2], position[1], // top left
+    // 1.0f,1.0f, 0.0f, position[0], position[1], // top right
+    // 1.0f,0.0f, 0.0f, position[0], position[3], // bottom right
+    //
+    // 0.0f,1.0f, 0.0f, position[2], position[1], // top left
+    // 0.0f,0.0f, 0.0f, position[2], position[3], // bottom left
+    // 1.0f,0.0f, 0.0f, position[0], position[3], // bottom right
+    //
+
+    // TODO: make this look better
+    0.0f,1.0f, 0.0f, position[0], position[1], // top left
+    1.0f,1.0f, 0.0f, position[2], position[1], // top right
+    1.0f,0.0f, 0.0f, position[2], position[3], // bottom right
+
+    0.0f,1.0f, 0.0f, position[0], position[1], // top left
+    0.0f,0.0f, 0.0f, position[0], position[3], // bottom left
+    1.0f,0.0f, 0.0f, position[2], position[3], // bottom right
+  };
+
+  vao_bind(vao);
+  vbo_bind(vbo);
+  vbo_buffer(sizeof(vertices_buffer), vertices_buffer, GL_STATIC_DRAW);
+
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+  glEnableVertexAttribArray(1);
+
+  return (struct rect){
+    .x = x, .y = y,
+    .width = width,
+    .height = height,
+    .vao_ = vao,
+  };
+}
+
+void renderer_drawfromatlas(Atlas atlas, struct rect* rectangle , struct shader* shader){
+  vao_bind(rectangle->vao_);
+  mat4 model;
+
+  mat4_identity(model);
+
+  mat4_translate(model, (vec3){rectangle->x, rectangle->y, 0.0f});
+  mat4_scalev_make(model,(vec3){rectangle->width, rectangle->height, 0.0f});
+
+  tex_bind(*atlas.texture);
+  glUniform1i(glGetUniformLocation(shader->handle, "texture0"), 0);
+  glUniformMatrix4fv(glGetUniformLocation(shader->handle, "model"), 1, GL_FALSE, &model[0][0]);
+
+  glActiveTexture(GL_TEXTURE0);
+
+  glBindVertexArray(rectangle->vao_);
+  glDrawArrays(GL_TRIANGLES, 0, 6);
 }
