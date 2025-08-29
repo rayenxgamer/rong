@@ -19,8 +19,8 @@ struct ortho_camera camera_init_ortho(vec3 pos, float left, float right, float b
   return temp_camera;
 };
 
-void camera_update(struct ortho_camera camera, struct shader* shader){
-  shader_bind(*shader);
-  shader_setm4x4(*shader, "projection", camera.projection_matrix);
-  shader_setm4x4(*shader, "view", camera.view_matrix);
+void camera_update(struct ortho_camera camera, Shader* shaderc){
+  shader_bind(*shaderc);
+  shader_setm4x4(*shaderc, "projection", camera.projection_matrix);
+  shader_setm4x4(*shaderc, "view", camera.view_matrix);
 }

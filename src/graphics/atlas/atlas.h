@@ -12,4 +12,4 @@ typedef struct {
 } Atlas;
 
 Atlas atlas_create(uint32_t size_x, uint32_t size_y,Texture* texture);
-void atlas_get_texture_at(Atlas* atlas, vec4 output ,uint32_t x, uint32_t y);
+void* atlas_get_texture_at(Atlas* atlas ,uint32_t x, uint32_t y);

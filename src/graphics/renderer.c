@@ -1,10 +1,8 @@
 #include "graphics/buffer.h"
 #include "math/mat4.h"
-#include "math/vec2.h"
 #include <graphics/renderer.h>
-#include <stdio.h>
 
-void renderer_directdrawline(float xstart, float ystart, float xend, float yend, struct shader shader){
+void renderer_directdrawline(float xstart, float ystart, float xend, float yend, Shader shader){
 
   uint32_t vao = vao_create();
   uint32_t vbo = vbo_create();
@@ -62,7 +60,7 @@ struct rect renderer_initrect_tex(float x, float y, float height, float width, T
   return self;
 };
 
-void renderer_drawrect_tex(struct rect rectangle, struct shader* shader){
+void renderer_drawrect_tex(struct rect rectangle, Shader* shader){
   /* rendering code here */
   mat4 model1;
   mat4_identity(model1);
@@ -107,7 +105,7 @@ struct rect renderer_initrect(float x, float y, float height, float width){
   return self;
 };
 
-void renderer_drawrect(struct rect rectangle, struct shader* shader){
+void renderer_drawrect(struct rect rectangle, Shader* shader){
   /* rendering code here */
   glUseProgram(shader->handle);
   mat4 model;
@@ -124,7 +122,7 @@ void renderer_drawrect(struct rect rectangle, struct shader* shader){
   return;
 };
 
-struct rect renderer_init_particles(struct rect* rectangle, color color, struct shader* shader){
+struct rect renderer_init_particles(struct rect* rectangle, Color color, Shader* shader){
   glGenVertexArrays(1, &rectangle->vao_);
   uint32_t vbo = vbo_create();
   uint32_t ibo = ibo_create();
@@ -149,7 +147,7 @@ struct rect renderer_init_particles(struct rect* rectangle, color color, struct 
   return *rectangle;
 }
 
-void renderer_drawrect_particle(struct rect* rectangle, color color, struct shader* shader){
+void renderer_drawrect_particle(struct rect* rectangle, Color color, Shader* shader){
   /* rendering code here */
   mat4 model1;
   mat4_identity(model1);
@@ -196,7 +194,7 @@ background_props renderer_initbackground(background_props props){
   return (background_props){props.window_height, props.window_width, props.texture2D, vao};
 }
 
-void renderer_drawbackground(background_props* props ,struct shader* shader){
+void renderer_drawbackground(background_props* props ,Shader* shader){
   mat4 model;
   mat4_identity(model);
 
@@ -216,33 +214,13 @@ void renderer_drawbackground(background_props* props ,struct shader* shader){
 
 
 struct rect renderer_initatlas(Atlas atlas, vec4 position, float x, float y, float height, float width){
+  vec4 pos;
+  vec4_copy(pos, position);
+
   uint32_t vao = vao_create();
-   uint32_t vbo = vbo_create();
-
-  printf("%f\n", position[0]);
-  printf("%f\n", position[1]);
-  printf("%f\n", position[2]);
-  printf("%f\n", position[3]);
-
+  uint32_t vbo = vbo_create();
 
   const float vertices_buffer[] = {
-    // 0.0f,1.0f, 0.0f, position[0], position[3], // top left
-    // 1.0f,1.0f, 0.0f, position[2], position[3], // top right
-    // 1.0f,0.0f, 0.0f, position[2], position[1], // bottom right
-    //
-    // 0.0f,1.0f, 0.0f, position[0], position[3], // top left
-    // 0.0f,0.0f, 0.0f, position[0], position[1], // bottom left
-    // 1.0f,0.0f, 0.0f, position[2], position[1], // bottom right
-
-    // 0.0f,1.0f, 0.0f, position[2], position[1], // top left
-    // 1.0f,1.0f, 0.0f, position[0], position[1], // top right
-    // 1.0f,0.0f, 0.0f, position[0], position[3], // bottom right
-    //
-    // 0.0f,1.0f, 0.0f, position[2], position[1], // top left
-    // 0.0f,0.0f, 0.0f, position[2], position[3], // bottom left
-    // 1.0f,0.0f, 0.0f, position[0], position[3], // bottom right
-    //
-
     // TODO: make this look better
     0.0f,1.0f, 0.0f, position[0], position[1], // top left
     1.0f,1.0f, 0.0f, position[2], position[1], // top right
@@ -270,7 +248,7 @@ struct rect renderer_initatlas(Atlas atlas, vec4 position, float x, float y, flo
   };
 }
 
-void renderer_drawfromatlas(Atlas atlas, struct rect* rectangle , struct shader* shader){
+void renderer_drawfromatlas(Atlas atlas, struct rect* rectangle , Shader* shader){
   vao_bind(rectangle->vao_);
   mat4 model;
 

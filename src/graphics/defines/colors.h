@@ -4,4 +4,4 @@
 
 typedef struct {
   float r, g, b, a;
-} color;
+} Color;

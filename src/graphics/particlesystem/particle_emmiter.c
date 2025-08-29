@@ -66,7 +66,7 @@ struct particle_list_node* particle_list_node_delete_middle(struct particle_list
   return head;
 };
 
-void particles_emit(struct particle_list_node* head,struct shader* shader){
+void particles_emit(struct particle_list_node* head,Shader* shader){
   if (particle_list_get_size(head) < PARTICLE_LIST_MAX_COUNT) {
     struct particle_list_node* new_node = NULL;
     new_node = malloc(sizeof(struct particle_list_node));
@@ -79,7 +79,7 @@ void particles_emit(struct particle_list_node* head,struct shader* shader){
   }
 }
 
-void particle_emit_(struct particle* particle, struct shader* shader){
+void particle_emit_(struct particle* particle, Shader* shader){
   if (particle->lifetime > 0.0f) {
     renderer_drawrect_particle(&particle->particle_rectangle, particle->color,shader);
     particle->color.a -= 0.03f;
@@ -89,7 +89,7 @@ void particle_emit_(struct particle* particle, struct shader* shader){
   }
 };
 
-void particles_update(struct particle_list_node* head, struct shader* shader){
+void particles_update(struct particle_list_node* head, Shader* shader){
   // TODO: some way to loop through all of the particles with more than 0 lifetime and emit them
   // {also to not draw them when they don't have more than 0 lifetime and remove them}
   while (head->next != NULL && particle_list_get_size(head) <= PARTICLE_LIST_MAX_COUNT) {

@@ -50,7 +50,7 @@ static uint32_t shader_compile(const char *shaderpath, GLenum type){
   return temp_shader_handle;
 }
 
-void shader_create(struct shader* self,const char *vpath, const char *fpath){
+void shader_create(Shader* self,const char *vpath, const char *fpath){
   uint32_t success_program;
 
   self->vs_handle = shader_compile(vpath, GL_VERTEX_SHADER);
@@ -72,42 +72,42 @@ void shader_create(struct shader* self,const char *vpath, const char *fpath){
   glDeleteShader(self->fs_handle);
 };
 
-void shader_bind(struct shader self){
+void shader_bind(Shader self){
   glUseProgram(self.handle);
 };
 
-void shader_setb(struct shader shader, const char* name, bool value){
+void shader_setb(Shader shader, const char* name, bool value){
   glUniform1i(glGetUniformLocation(shader.handle, name), value);
 };
 
-void shader_seti(struct shader shader, const char* name, int value){
+void shader_seti(Shader shader, const char* name, int value){
   glUniform1i(glGetUniformLocation(shader.handle, name), value);
 };
 
-void shader_setui(struct shader shader, const char* name, uint32_t value){
+void shader_setui(Shader shader, const char* name, uint32_t value){
   glUniform1ui(glGetUniformLocation(shader.handle, name), value);
 };
 
-void shader_setf(struct shader shader, const char* name, float value){
+void shader_setf(Shader shader, const char* name, float value){
   glUniform1f(glGetUniformLocation(shader.handle, name), value);
 };
 
-void shader_setv4(struct shader shader, const char* name, vec4 value){
+void shader_setv4(Shader shader, const char* name, vec4 value){
   glUniform4fv(glGetUniformLocation(shader.handle, name),1, &value[0]);
 };
 
-void shader_setv3(struct shader shader, const char* name, vec3 value){
+void shader_setv3(Shader shader, const char* name, vec3 value){
   glUniform3fv(glGetUniformLocation(shader.handle, name),1, &value[0]);
 };
 
-void shader_setf3(struct shader shader, const char* name, float value1, float value2, float value3){
+void shader_setf3(Shader shader, const char* name, float value1, float value2, float value3){
   glUniform3f(glGetUniformLocation(shader.handle, name), value1, value2, value3);
 };
 
-void shader_setm4x4(struct shader shader, const char* name, mat4 value){
+void shader_setm4x4(Shader shader, const char* name, mat4 value){
   glUniformMatrix4fv(glGetUniformLocation(shader.handle, name), 1, GL_FALSE, &value[0][0]);
 };
 
-void shader_setm3x3(struct shader shader, const char* name, mat3 value){
+void shader_setm3x3(Shader shader, const char* name, mat3 value){
   glUniformMatrix3fv(glGetUniformLocation(shader.handle, name), 1, GL_FALSE, &value[0][0]);
 };

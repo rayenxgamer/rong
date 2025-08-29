@@ -23,19 +23,19 @@ typedef struct {
 } background_props;
 
 void renderer_drawaabbs();
-void renderer_directdrawline(float xstart, float ystart, float xend, float yend, struct shader shader);
+void renderer_directdrawline(float xstart, float ystart, float xend, float yend, Shader shader);
 
 background_props renderer_initbackground(background_props props);
-void renderer_drawbackground(background_props* props ,struct shader* shader);
+void renderer_drawbackground(background_props* props ,Shader* shader);
 
 struct rect renderer_initrect_tex(float x, float y, float height, float width, Texture texture);
-void renderer_drawrect_tex(struct rect rectangle, struct shader* shader);
+void renderer_drawrect_tex(struct rect rectangle, Shader* shader);
 
 struct rect renderer_initrect(float x, float y, float height, float width);
-void renderer_drawrect(struct rect rectangle, struct shader* shader);
+void renderer_drawrect(struct rect rectangle, Shader* shader);
 
-struct rect renderer_init_particles(struct rect *rectangle, color color, struct shader* shader);
-void renderer_drawrect_particle(struct rect *rectangle, color color, struct shader* shader);
+struct rect renderer_init_particles(struct rect *rectangle, Color color, Shader* shader);
+void renderer_drawrect_particle(struct rect *rectangle, Color color, Shader* shader);
 
 struct rect renderer_initatlas(Atlas atlas, vec4 position , float x, float y, float height, float width);
-void renderer_drawfromatlas(Atlas atlas,struct rect* rectangle , struct shader* shader);
+void renderer_drawfromatlas(Atlas atlas,struct rect* rectangle , Shader* shader);

@@ -1,18 +1,19 @@
-#include <graphics/camera.h>
-#include <graphics/shader.h>
-#include <graphics/texture.h>
-#include <graphics/renderer.h>
-#include <graphics/atlas/atlas.h>
-#include <graphics/particlesystem/particle_emmiter.h>
-#include <math/projection.h>
-#include <math/common.h>
-#include <math/aabb.h>
-#include <math/vec2.h>
-#include <game/ball.h>
-#include <game/window.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+
+#include "graphics/camera.h"
+#include "graphics/shader.h"
+#include "graphics/texture.h"
+#include "graphics/renderer.h"
+#include "graphics/atlas/atlas.h"
+#include "graphics/particlesystem/particle_emmiter.h"
+#include "math/projection.h"
+#include "math/common.h"
+#include "math/vec2.h"
+#include "game/ball.h"
+#include "game/window.h"
+#include "utils/log.h"
 
 #define PLAYER_VERT_SPEED 6.0f
 #define GRAVITY -1.0f
@@ -20,9 +21,9 @@
 background_props bprops;
 struct rect player1, player2, ball_rect;
 struct rect background_rect;
-struct shader debugshader;
-struct shader textureshader;
-struct shader particleshader;
+Shader debugshader;
+Shader textureshader;
+Shader particleshader;
 struct ortho_camera cam;
 struct ball ball_properties;
 struct particle_list_node* head;
@@ -63,7 +64,7 @@ void init(){
   };
 
   vec4 position;
-  atlas_get_texture_at(&font_atlas, position, 0, 13);
+  vec4_copy(position ,atlas_get_texture_at(&font_atlas, 0, 13));
   font_atlas_rect = renderer_initatlas(font_atlas, position,
                                     300.0f, 240.0f, 50, 50);
 
@@ -71,7 +72,7 @@ void init(){
 
   window_set_attributes(640, 480, "RONG: on the RENGINE!");
 
-  particle_default.color = (color){.0, .0, .0, 1.0};
+  particle_default.color = (Color){.0, .0, .0, 1.0};
   particle_default.lifetime = 1.0f;
 
   particle_default.particle_rectangle.x = 320.0f;
@@ -181,9 +182,12 @@ void update(float deltatime){
   if(player2.y <= 0.0f){
     player2.y = 0.0f;
   };
+  int x = 1;
+  ALOG(x, "did work");
 };
 
-void shutdown(){};
+void shutdown(){
+};
 
 int main(int argc, char* argv[]) {
   if (argc == 2) {

@@ -11,4 +11,4 @@ struct ortho_camera {
 };
 
 struct ortho_camera camera_init_ortho(vec3 pos, float left, float right, float bottom, float top, float near, float far);
-void camera_update(struct ortho_camera camera, struct shader* shader);
+void camera_update(struct ortho_camera camera, Shader* shader);
