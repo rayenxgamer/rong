@@ -85,6 +85,10 @@ void window_init(RENGINE_FUNC_W init, RENGINE_FUNC_W_DT update, RENGINE_FUNC_W t
     exit(1);
   };
 
+  printf("Using %s\n", glGetString(GL_VENDOR));
+  printf("On %s version: %s\n",glGetString(GL_RENDERER), glGetString(GL_VERSION));
+  printf("Shader language: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
   glfwSetFramebufferSizeCallback(window.self, _framebuffer_size_callback);
   glfwSwapInterval(1);
 };

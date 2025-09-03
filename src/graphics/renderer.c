@@ -214,8 +214,6 @@ void renderer_drawbackground(background_props* props ,Shader* shader){
 
 
 struct rect renderer_initatlas(Atlas atlas, vec4 position, float x, float y, float height, float width){
-  vec4 pos;
-  vec4_copy(pos, position);
 
   uint32_t vao = vao_create();
   uint32_t vbo = vbo_create();

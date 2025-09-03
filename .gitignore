@@ -1,6 +1,3 @@
 .cache/
-<<<<<<< HEAD
-=======
 .deprecated/
->>>>>>> 04d0d4b (overhawled the entire window system, aswell as added a deltatime variable and a tick system alongside it!)
 build/

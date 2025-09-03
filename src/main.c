@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-
 #include "graphics/camera.h"
 #include "graphics/shader.h"
 #include "graphics/texture.h"
@@ -14,6 +10,10 @@
 #include "game/ball.h"
 #include "game/window.h"
 #include "utils/log.h"
+
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
 
 #define PLAYER_VERT_SPEED 6.0f
 #define GRAVITY -1.0f
@@ -64,7 +64,7 @@ void init(){
   };
 
   vec4 position;
-  vec4_copy(position ,atlas_get_texture_at(&font_atlas, 0, 13));
+  vec4_copy(position ,atlas_get_texture_at(&font_atlas, 0, 0));
   font_atlas_rect = renderer_initatlas(font_atlas, position,
                                     300.0f, 240.0f, 50, 50);
 

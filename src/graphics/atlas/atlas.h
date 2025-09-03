@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <assert.h>
 
 #include <graphics/texture.h>
 #include <math/vec2.h>
