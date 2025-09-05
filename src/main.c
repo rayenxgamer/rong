@@ -119,7 +119,6 @@ void render(){
 
   renderer_drawfromatlas(font_atlas, &font_atlas_rect, &textureshader);
   glDisable(GL_BLEND);
-
 };
 
 void tick(){
