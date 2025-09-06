@@ -25,6 +25,7 @@ add_executable(rong
   src/graphics/buffer.c
   src/graphics/texture.c
   src/graphics/camera.c
+  src/graphics/font/font.c
   src/graphics/atlas/atlas.c
   src/graphics/particlesystem/particle_emmiter.c
 )

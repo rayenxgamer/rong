@@ -4,6 +4,7 @@
 #include "graphics/renderer.h"
 #include "graphics/atlas/atlas.h"
 #include "graphics/particlesystem/particle_emmiter.h"
+#include "graphics/font/font.h"
 #include "math/projection.h"
 #include "math/common.h"
 #include "math/vec2.h"
@@ -34,6 +35,7 @@ Texture font_atlas_texture;
 
 Texture loafer, string_ball, twach, bg_texture;
 Texture star_particle;
+Font game_font;
 
 vec2 player1_coords;
 vec2 player2_coords;
@@ -67,6 +69,15 @@ void init(){
   vec4_copy(position ,atlas_get_texture_at(&font_atlas, 0, 0));
   font_atlas_rect = renderer_initatlas(font_atlas, position,
                                     300.0f, 240.0f, 50, 50);
+
+  char font_buffer[FONT_MAX_HEIGHT][FONT_MAX_WIDTH] = {
+    "abcdefghijklmnop",
+    "qrstuvxwyz",
+    "1234567890",
+    ".?:;-=()[]",
+  };
+
+  game_font = font_init(&font_atlas, font_buffer);
 
   bprops = renderer_initbackground((background_props){480.0f, 640.0f, bg_texture});
 
@@ -118,6 +129,7 @@ void render(){
   renderer_drawrect_tex(player1, &textureshader);
 
   renderer_drawfromatlas(font_atlas, &font_atlas_rect, &textureshader);
+  font_draw_one_letter(game_font, 'l', 200, 200, 50, 60, &textureshader);
   glDisable(GL_BLEND);
 };
 

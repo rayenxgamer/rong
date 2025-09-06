@@ -12,8 +12,8 @@
 #include "graphics/shader.h"
 #include "math/vec4.h"
 
-#define FONT_MAX_HEIGHT 8
-#define FONT_MAX_WIDTH 8
+#define FONT_MAX_HEIGHT 16
+#define FONT_MAX_WIDTH 16
 
 typedef struct {
   Atlas font_atlas;
@@ -29,5 +29,5 @@ typedef struct {
 //*/
 //
 Font font_init(Atlas* font_atlas, const char font_buffer_template[FONT_MAX_HEIGHT][FONT_MAX_WIDTH]);
-void font_draw_one_letter(Font font, char letter, float x, float y, uint8_t size_x, uint8_t size_y, Shader shader);
+void font_draw_one_letter(Font font, char letter, float x, float y, uint8_t size_x, uint8_t size_y, Shader* shader);
 void font_draw_word(const char* input, Color color, Shader shader);
