@@ -1,4 +1,4 @@
-#include "glad/gl.h"
+#include <glad/gl.h>
 #include "GLFW/glfw3.h"
 #include <game/window.h>
 #include <stdlib.h>
@@ -111,11 +111,11 @@ void window_set_should_close(){
   glfwSetWindowShouldClose(window.self, true);
 }
 
-float window_get_width(){
+static float window_get_width(){
   return window.width;
 };
 
-float window_get_height(){
+static float window_get_height(){
   return window.height;
 };
 

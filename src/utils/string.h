@@ -16,7 +16,7 @@ static inline int isletterinbuffer(char letter, const char* buffer){
   return 0;
 }
 
-static inline bool isletterinbuffermulti(char letter, int x, int y, const char buffer[x][y]){
+static inline bool isletterinbuffermulti(char letter, int x, int y, const char buffer[16][16]){
   assert(buffer != NULL);
   for (unsigned int i = 0; i < x; i++) {
     for (unsigned int j = 0; j < y; j++) {
@@ -28,7 +28,7 @@ static inline bool isletterinbuffermulti(char letter, int x, int y, const char b
   return false;
 }
 
-static inline bool isletterinbuffermulti_gi(char letter, int x, int y, const char buffer[x][y], vec2 output){
+static inline bool isletterinbuffermulti_gi(char letter, int x, int y, const char buffer[16][16], vec2 output){
   assert(buffer != NULL);
   assert(output != NULL);
 

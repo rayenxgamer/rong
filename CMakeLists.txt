@@ -8,10 +8,6 @@ project(rong
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-option(OPTIMIZATIONS_ENABLED "optimizations enabled" OFF)
-
-# set(OpenGL_GL_PREFERENCE GLVND) #
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/deps)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
@@ -29,12 +25,13 @@ add_executable(rong
   src/graphics/atlas/atlas.c
   src/graphics/particlesystem/particle_emmiter.c
 )
+if(MSVC)
+    set_target_properties(
+       rong PROPERTIES
+       VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/build")
+endif()
 
 target_compile_options(rong PUBLIC -g)
-
-if(OPTIMIZATIONS_ENABLED)
-  target_compile_options(rong PUBLIC -O3)
-endif()
 
 find_package(glfw3 3.4 QUIET)
 if (NOT glfw3_FOUND)
@@ -49,8 +46,10 @@ if (NOT glfw3_FOUND)
   set(FETCHCONTENT_QUIET NO)
   #[[ you can toggle these to have either wayland or X11 support, useful for systems
   which were setup without one of them ]]
-  set(GLFW_BUILD_WAYLAND 0)
-  set(GLFW_BUILD_X11 1)
+  if(LINUX)
+    set(GLFW_BUILD_WAYLAND 0)
+    set(GLFW_BUILD_X11 1)
+  endif()
 
   FetchContent_MakeAvailable(glfw3)
   endif()
@@ -73,4 +72,8 @@ if(NOT glad_POPULATED)
     glad_add_library(glad REPRODUCIBLE EXCLUDE_FROM_ALL LOADER API gl:core=3.3)
 endif()
 
-target_link_libraries(rong PUBLIC glad glfw m)
+if(WIN32)
+    target_link_libraries(rong PUBLIC glad glfw)
+else()
+    target_link_libraries(rong PUBLIC glad glfw m)
+endif()

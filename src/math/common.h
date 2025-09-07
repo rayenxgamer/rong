@@ -61,9 +61,9 @@ static inline void clampfmax(float num, float max){
 };
 
 static inline float deg_to_rad(float deg){
-  return deg * PI / 180;
+  return (float) (deg * (float)PI / 180.0f);
 };
 
 static inline float rad_to_deg(float rad){
-  return rad * 180 / PI;
+  return (float) rad * 180.0f / (float)PI;
 };

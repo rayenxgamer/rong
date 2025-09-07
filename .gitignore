@@ -1,3 +1,6 @@
 .cache/
 .deprecated/
+.vs/
 build/
+out/
+CMakeSettings/

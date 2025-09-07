@@ -42,7 +42,7 @@ vec2 player2_coords;
 
 unsigned int total_tick_count = 0;
 
-void init(){
+static void init(){
   vec2_copy(player1_coords, (vec2){590.0f, 180.0f});
   vec2_copy(player2_coords, (vec2){25.0f, 180.0f});
 
@@ -110,7 +110,7 @@ void init(){
   ball_properties.ball_rectangle = &ball_rect;
 };
 
-void render(){
+static void render(){
   glClearColor(.0f, .0f, .0f, .0f);
   glClear(GL_COLOR_BUFFER_BIT);
 
@@ -129,11 +129,10 @@ void render(){
   renderer_drawrect_tex(player1, &textureshader);
 
   renderer_drawfromatlas(font_atlas, &font_atlas_rect, &textureshader);
-  font_draw_one_letter(game_font, 'l', 200, 200, 50, 60, &textureshader);
   glDisable(GL_BLEND);
 };
 
-void tick(){
+static void tick(){
   total_tick_count++;
 
   if(window_is_pressed(GLFW_KEY_ESCAPE))
@@ -145,7 +144,7 @@ void tick(){
   }
 };
 
-void update(float deltatime){
+static void update(float deltatime){
   camera_update(cam, &debugshader);
   camera_update(cam, &textureshader);
   camera_update(cam, &particleshader);
@@ -197,7 +196,7 @@ void update(float deltatime){
   ALOG(x, "did work");
 };
 
-void shutdown(){
+static void shutdown(){
 };
 
 int main(int argc, char* argv[]) {
