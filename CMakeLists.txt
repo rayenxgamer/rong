@@ -26,9 +26,7 @@ add_executable(rong
   src/graphics/particlesystem/particle_emmiter.c
 )
 if(MSVC)
-    set_target_properties(
-       rong PROPERTIES
-       VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/build")
+    target_compile_options(rong PUBLIC /Wall)
 endif()
 
 target_compile_options(rong PUBLIC -g)
@@ -77,3 +75,6 @@ if(WIN32)
 else()
     target_link_libraries(rong PUBLIC glad glfw m)
 endif()
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

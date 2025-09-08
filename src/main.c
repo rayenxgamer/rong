@@ -52,12 +52,12 @@ static void init(){
 
   cam = camera_init_ortho((vec3){0.0f, 0.0f, 0.0f}, 0.0f, 640.0f, 0.0f, 480.0f, -1.0f, 1.0f);
 
-  bg_texture = tex_create("../assets/sprites/level_background_purpur-dreams.png", true);
-  loafer = tex_create("../assets/sprites/player_loafer.png", true);
-  string_ball = tex_create("../assets/sprites/string_ball.png", true);
-  twach = tex_create("../assets/sprites/player_twach.png", true);
-  star_particle = tex_create("../assets/sprites/star_purple_remastered_firstiteration.png", true);
-  font_atlas_texture = tex_create("../assets/fonts/font.png", true);
+  bg_texture = tex_create("assets/sprites/level_background_purpur-dreams.png", true);
+  loafer = tex_create("assets/sprites/player_loafer.png", true);
+  string_ball = tex_create("assets/sprites/string_ball.png", true);
+  twach = tex_create("assets/sprites/player_twach.png", true);
+  star_particle = tex_create("assets/sprites/star_purple_remastered_firstiteration.png", true);
+  font_atlas_texture = tex_create("assets/fonts/font.png", true);
 
   font_atlas = (Atlas){
     .texture = &font_atlas_texture,
@@ -99,9 +99,9 @@ static void init(){
   head->data = particle_default;
   head->next = NULL;
 
-  shader_create(&debugshader, "../shaders/vs.glsl", "../shaders/fs.glsl");
-  shader_create(&textureshader, "../shaders/textureshaders/vs.glsl", "../shaders/textureshaders/fs.glsl");
-  shader_create(&particleshader, "../shaders/particleshader/vs.glsl", "../shaders/particleshader/fs.glsl");
+  shader_create(&debugshader, "shaders/vs.glsl", "shaders/fs.glsl");
+  shader_create(&textureshader, "shaders/textureshaders/vs.glsl", "shaders/textureshaders/fs.glsl");
+  shader_create(&particleshader, "shaders/particleshader/vs.glsl", "shaders/particleshader/fs.glsl");
 
   ball_rect = renderer_initrect_tex(320.0f, 240.0f, 25.0f, 25.0f, string_ball);
   player1 = renderer_initrect_tex(player1_coords[0], player1_coords[1], 120.0f, 25.0f, twach);
