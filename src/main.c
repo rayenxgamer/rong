@@ -66,7 +66,7 @@ static void init(){
   };
 
   vec4 position;
-  vec4_copy(position ,atlas_get_texture_at(&font_atlas, 0, 0));
+  vec4_copy(position ,atlas_get_texture_at(&font_atlas, 1, 0));
   font_atlas_rect = renderer_initatlas(font_atlas, position,
                                     300.0f, 240.0f, 50, 50);
 
