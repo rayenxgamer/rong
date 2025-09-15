@@ -26,7 +26,7 @@ add_executable(rong
   src/graphics/particlesystem/particle_emmiter.c
 )
 if(MSVC)
-    target_compile_options(rong PUBLIC /Wall)
+  #    target_compile_options(rong PUBLIC /Wall)
 endif()
 
 target_compile_options(rong PUBLIC -g)

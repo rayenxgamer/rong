@@ -212,11 +212,9 @@ void renderer_drawbackground(background_props* props ,Shader* shader){
   glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-
 struct rect renderer_initatlas(Atlas atlas, vec4 position, float x, float y, float height, float width){
-
-  uint32_t vao = vao_create();
-  uint32_t vbo = vbo_create();
+  static uint32_t vao = 0;
+  static uint32_t vbo = 0;
 
   const float vertices_buffer[] = {
     // TODO: make this look better
@@ -229,14 +227,23 @@ struct rect renderer_initatlas(Atlas atlas, vec4 position, float x, float y, flo
     1.0f,0.0f, 0.0f, position[2], position[3], // bottom right
   };
 
-  vao_bind(vao);
-  vbo_bind(vbo);
-  vbo_buffer(sizeof(vertices_buffer), vertices_buffer, GL_STATIC_DRAW);
+  if(vao == 0){
+    vao = vao_create();
+    vbo = vbo_create();
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-  glEnableVertexAttribArray(1);
+    vao_bind(vao);
+    vbo_bind(vbo);
+    vbo_buffer(sizeof(vertices_buffer), vertices_buffer, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+  };
+
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices_buffer), vertices_buffer);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   return (struct rect){
     .x = x, .y = y,

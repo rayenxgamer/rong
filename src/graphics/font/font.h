@@ -20,6 +20,7 @@ typedef struct {
   Color font_color;
   char font_template_buffer_internal[FONT_MAX_HEIGHT][FONT_MAX_WIDTH];
 } Font;
+
 //*
 // array[x][y] {
 //    "ABCDEFG...P",
@@ -27,7 +28,7 @@ typedef struct {
 // }
 //
 //*/
-//
+
 Font font_init(Atlas* font_atlas, const char font_buffer_template[FONT_MAX_HEIGHT][FONT_MAX_WIDTH]);
-void font_draw_one_letter(Font font, char letter, float x, float y, uint8_t size_x, uint8_t size_y, Shader* shader);
-void font_draw_word(const char* input, Color color, Shader shader);
+void font_draw_one_letter(Font* font, char letter, float x, float y, uint8_t size_x, uint8_t size_y, Shader* shader);
+void font_draw_word(Font* font, const char* input, float x, float y, float height, float width, Color color, float offset, Shader* shader);

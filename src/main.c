@@ -66,7 +66,7 @@ static void init(){
   };
 
   vec4 position;
-  vec4_copy(position ,atlas_get_texture_at(&font_atlas, 0, 0));
+  vec4_copy(position ,atlas_get_texture_at(&font_atlas, 11, 0));
   font_atlas_rect = renderer_initatlas(font_atlas, position,
                                     300.0f, 240.0f, 50, 50);
 
@@ -119,16 +119,20 @@ static void render(){
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   renderer_drawbackground(&bprops, &textureshader);
+
+  font_draw_word(&game_font, "hello", 290, 340, 50, 50, REN_WHITE, 50, &textureshader);
+  font_draw_word(&game_font, "world!", 240, 240, 50, 50, REN_WHITE, 50, &textureshader);
+
   renderer_drawrect_tex(ball_rect, &textureshader);
 
   glUseProgram(particleshader.handle);
   particles_update(head, &particleshader);
 
   glUseProgram(textureshader.handle);
+
   renderer_drawrect_tex(player2, &textureshader);
   renderer_drawrect_tex(player1, &textureshader);
 
-  renderer_drawfromatlas(font_atlas, &font_atlas_rect, &textureshader);
   glDisable(GL_BLEND);
 };
 
