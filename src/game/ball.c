@@ -32,7 +32,7 @@ void ball_update(struct ball *ball_props,float deltatime){
   }
 }
 
-void ball_bounce(struct ball *ball_props, struct rect player){
+void ball_bounce(struct ball *ball_props, Rect player){
   float distanceballrect = 0.0f;
   float center_of_paddle = 0.0f;
   // reminder, the rects's X is not the middle, it's the bottom left
@@ -74,7 +74,7 @@ void ball_bounce(struct ball *ball_props, struct rect player){
     };
 }
 
-static float aabb_get_collision_time_between_(struct ball* ball_props, struct rect* obstacle){
+static float aabb_get_collision_time_between_(struct ball* ball_props, Rect* obstacle){
   // the normal of the object to be collided with
     float normal_x, normal_y;
 
@@ -151,7 +151,7 @@ static float aabb_get_collision_time_between_(struct ball* ball_props, struct re
   return enterytime;
 };
 
-void ball_do_collisions(struct ball* ball, struct rect* obstacle, struct rect* player2rect){
+void ball_do_collisions(struct ball* ball, Rect* obstacle, Rect* player2rect){
   const float middle_of_screen = 320.0f;
 
   float collisiontime;

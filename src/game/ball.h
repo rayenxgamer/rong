@@ -8,11 +8,11 @@
 #define MAX_BALL_VELOCITY_Y 3.0f
 
 struct ball{
-  struct rect* ball_rectangle;
+  Rect* ball_rectangle;
   vec2 vel;
 };
 
-static float aabb_get_collision_time_between_(struct ball* ball_props, struct rect* rect2);
+static float aabb_get_collision_time_between_(struct ball* ball_props, Rect* rect2);
 void ball_update(struct ball *ball_props,float deltatime);
-void ball_do_collisions(struct ball* ball, struct rect* obstacle, struct rect* player2rect);
-void ball_bounce(struct ball *ball_props, struct rect player);
+void ball_do_collisions(struct ball* ball, Rect* obstacle, Rect* player2rect);
+void ball_bounce(struct ball *ball_props, Rect player);

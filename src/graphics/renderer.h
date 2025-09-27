@@ -7,14 +7,14 @@
 #include <graphics/texture.h>
 #include <math/aabb.h>
 
-struct rect{
+typedef struct{
   float x,y;
   float height;
   float width;
   uint32_t vao_;
   uint32_t vbo_;
   Texture texture;
-};
+} Rect;
 
 typedef struct {
   float window_height, window_width;
@@ -28,14 +28,15 @@ void renderer_directdrawline(float xstart, float ystart, float xend, float yend,
 background_props renderer_initbackground(background_props props);
 void renderer_drawbackground(background_props* props ,Shader* shader);
 
-struct rect renderer_initrect_tex(float x, float y, float height, float width, Texture texture);
-void renderer_drawrect_tex(struct rect rectangle, Shader* shader);
+Rect renderer_initrect_tex(float x, float y, float height, float width, Texture texture);
+void renderer_drawrect_tex(Rect rectangle, Shader* shader);
 
-struct rect renderer_initrect(float x, float y, float height, float width);
-void renderer_drawrect(struct rect rectangle, Shader* shader);
+Rect renderer_initrect(float x, float y, float height, float width);
+void renderer_drawrect(Rect rectangle, Shader* shader);
 
-struct rect renderer_init_particles(struct rect *rectangle, Color color, Shader* shader);
-void renderer_drawrect_particle(struct rect *rectangle, Color color, Shader* shader);
+Rect renderer_init_particles(Rect *rectangle, Color color, Shader* shader);
+void renderer_drawrect_particle(Rect *rectangle, Color color, Shader* shader);
 
-struct rect renderer_initatlas(Atlas atlas, vec4 position , float x, float y, float height, float width);
-void renderer_drawfromatlas(Atlas atlas,struct rect* rectangle , Shader* shader);
+Rect renderer_initatlas(Atlas atlas, vec4 position , float x, float y, float height, float width);
+void renderer_drawfromatlas(Atlas atlas,Rect* rectangle , Shader* shader);
+void renderer_clear_color(GLclampf red, GLclampf blue, GLclampf green, GLclampf alpha);

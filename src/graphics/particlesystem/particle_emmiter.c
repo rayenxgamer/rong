@@ -82,7 +82,7 @@ void particles_emit(struct particle_list_node* head,Shader* shader){
 void particle_emit_(struct particle* particle, Shader* shader){
   if (particle->lifetime > 0.0f) {
     renderer_drawrect_particle(&particle->particle_rectangle, particle->color,shader);
-    particle->color.a -= 0.03f;
+    particle->color[3] -= 0.03f;
     particle->lifetime -= 0.06f;
   }else{
     return;

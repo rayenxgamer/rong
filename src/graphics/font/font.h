@@ -1,16 +1,10 @@
 #pragma once
 
-#include <stdio.h>
-#include <string.h>
 #include <stdint.h>
 
-#include "glad/gl.h"
-#include "utils/string.h"
 #include "graphics/atlas/atlas.h"
 #include "graphics/defines/colors.h"
-#include "graphics/renderer.h"
 #include "graphics/shader.h"
-#include "math/vec4.h"
 
 #define FONT_MAX_HEIGHT 16
 #define FONT_MAX_WIDTH 16
@@ -21,14 +15,14 @@ typedef struct {
   char font_template_buffer_internal[FONT_MAX_HEIGHT][FONT_MAX_WIDTH];
 } Font;
 
-//*
-// array[x][y] {
-//    "ABCDEFG...P",
-//    "QRTSUVXWYZ#####"
-// }
-//
-//*/
-
 Font font_init(Atlas* font_atlas, const char font_buffer_template[FONT_MAX_HEIGHT][FONT_MAX_WIDTH]);
 void font_draw_one_letter(Font* font, char letter, float x, float y, uint8_t size_x, uint8_t size_y, Shader* shader);
+
+void font_draw_one_letter_color(Font* font, char letter, float x, float y, uint8_t width, uint8_t height, Color color, Shader* shader);
+
+void font_draw_word_color_single(Font* font ,const char* input, float x, float y, float width, float height
+                          , Color color, float offset, Shader* shader);
+void font_draw_word_color(Font* font ,const char* input, float x, float y, float width, float height,
+                          int buffer_size ,Color color_buffer[buffer_size], float offset, Shader* shader);
+
 void font_draw_word(Font* font, const char* input, float x, float y, float height, float width, Color color, float offset, Shader* shader);

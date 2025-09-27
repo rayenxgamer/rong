@@ -25,7 +25,7 @@ void renderer_directdrawline(float xstart, float ystart, float xend, float yend,
   glDisable(GL_LINE_SMOOTH);
 };
 
-struct rect renderer_initrect_tex(float x, float y, float height, float width, Texture texture){
+Rect renderer_initrect_tex(float x, float y, float height, float width, Texture texture){
   uint32_t vao = vao_create();
   uint32_t vbo = vbo_create();
   uint32_t ibo = ibo_create();
@@ -50,7 +50,7 @@ struct rect renderer_initrect_tex(float x, float y, float height, float width, T
   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
   glEnableVertexAttribArray(1);
 
-  struct rect self;
+  Rect self;
   self.x = x;
   self.y = y;
   self.height = height;
@@ -60,7 +60,7 @@ struct rect renderer_initrect_tex(float x, float y, float height, float width, T
   return self;
 };
 
-void renderer_drawrect_tex(struct rect rectangle, Shader* shader){
+void renderer_drawrect_tex(Rect rectangle, Shader* shader){
   /* rendering code here */
   mat4 model1;
   mat4_identity(model1);
@@ -68,6 +68,7 @@ void renderer_drawrect_tex(struct rect rectangle, Shader* shader){
   mat4_translate(model1, (vec3){rectangle.x, rectangle.y, 0.0f});
   mat4_scalev_make(model1,(vec3){rectangle.width, rectangle.height, 0.0f});
 
+  shader_bind(*shader);
   tex_bind(rectangle.texture);
   glUniform1i(glGetUniformLocation(shader->handle, "texture0"), 0);
   glUniformMatrix4fv(glGetUniformLocation(shader->handle, "model"), 1, GL_FALSE, &model1[0][0]);
@@ -79,7 +80,7 @@ void renderer_drawrect_tex(struct rect rectangle, Shader* shader){
   glDrawArrays(GL_TRIANGLES, 0, 6);
 };
 
-struct rect renderer_initrect(float x, float y, float height, float width){
+Rect renderer_initrect(float x, float y, float height, float width){
   uint32_t vao = vao_create();
   uint32_t vbo = vbo_create();
   uint32_t ibo = ibo_create();
@@ -100,12 +101,12 @@ struct rect renderer_initrect(float x, float y, float height, float width){
 
   vao_attrib(vao, vbo, 0, 3,  GL_FLOAT,  GL_FALSE,  3 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
-  struct rect self = {x, y, height, width, vao, vbo};
+  Rect self = {x, y, height, width, vao, vbo};
   // more initialization code here
   return self;
 };
 
-void renderer_drawrect(struct rect rectangle, Shader* shader){
+void renderer_drawrect(Rect rectangle, Shader* shader){
   /* rendering code here */
   glUseProgram(shader->handle);
   mat4 model;
@@ -122,7 +123,7 @@ void renderer_drawrect(struct rect rectangle, Shader* shader){
   return;
 };
 
-struct rect renderer_init_particles(struct rect* rectangle, Color color, Shader* shader){
+Rect renderer_init_particles(Rect* rectangle, Color color, Shader* shader){
   glGenVertexArrays(1, &rectangle->vao_);
   uint32_t vbo = vbo_create();
   uint32_t ibo = ibo_create();
@@ -147,7 +148,7 @@ struct rect renderer_init_particles(struct rect* rectangle, Color color, Shader*
   return *rectangle;
 }
 
-void renderer_drawrect_particle(struct rect* rectangle, Color color, Shader* shader){
+void renderer_drawrect_particle(Rect* rectangle, Color color, Shader* shader){
   /* rendering code here */
   mat4 model1;
   mat4_identity(model1);
@@ -158,7 +159,7 @@ void renderer_drawrect_particle(struct rect* rectangle, Color color, Shader* sha
   tex_bind(rectangle->texture);
   glUniform1i(glGetUniformLocation(shader->handle, "texture0"), 0);
   glUniformMatrix4fv(glGetUniformLocation(shader->handle, "model"), 1, GL_FALSE, &model1[0][0]);
-  glUniform1f(glGetUniformLocation(shader->handle, "color"), color.a);
+  glUniform1f(glGetUniformLocation(shader->handle, "color"), color[3]);
 
   /* TODO: code to handle rotation */
   glActiveTexture(GL_TEXTURE0);
@@ -212,7 +213,7 @@ void renderer_drawbackground(background_props* props ,Shader* shader){
   glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-struct rect renderer_initatlas(Atlas atlas, vec4 position, float x, float y, float height, float width){
+Rect renderer_initatlas(Atlas atlas, vec4 position, float x, float y, float height, float width){
   static uint32_t vao = 0;
   static uint32_t vbo = 0;
 
@@ -245,7 +246,7 @@ struct rect renderer_initatlas(Atlas atlas, vec4 position, float x, float y, flo
   glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices_buffer), vertices_buffer);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-  return (struct rect){
+  return (Rect){
     .x = x, .y = y,
     .width = width,
     .height = height,
@@ -253,7 +254,7 @@ struct rect renderer_initatlas(Atlas atlas, vec4 position, float x, float y, flo
   };
 }
 
-void renderer_drawfromatlas(Atlas atlas, struct rect* rectangle , Shader* shader){
+void renderer_drawfromatlas(Atlas atlas, Rect* rectangle , Shader* shader){
   vao_bind(rectangle->vao_);
   mat4 model;
 
@@ -270,4 +271,9 @@ void renderer_drawfromatlas(Atlas atlas, struct rect* rectangle , Shader* shader
 
   glBindVertexArray(rectangle->vao_);
   glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+void renderer_clear_color(GLclampf red, GLclampf blue, GLclampf green, GLclampf alpha){
+  glClearColor(red, blue, green, alpha);
+  glClear(GL_COLOR_BUFFER_BIT);
 }

@@ -19,7 +19,7 @@ struct window{
 
 extern struct window window;
 
-void window_init(RENGINE_FUNC_W init, RENGINE_FUNC_W_DT update, RENGINE_FUNC_W tick, RENGINE_FUNC_W render, RENGINE_FUNC_W shutdown);
+void window_init(RENGINE_FUNC_W init, RENGINE_FUNC_W_DT update, RENGINE_FUNC_W tick, RENGINE_FUNC_W render, RENGINE_FUNC_W shutdown, const char* icon_path);
 void window_set_attributes(int height, int width, char* title);
 void window_updateloop();
 void window_set_should_close();

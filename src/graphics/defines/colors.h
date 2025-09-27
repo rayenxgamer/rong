@@ -1,9 +1,12 @@
 #pragma once
 
-#include <math/vec3.h>
+#include <math/vec4.h>
 
-typedef struct {
-  float r, g, b, a;
-} Color;
+typedef vec4 Color;
 
-#define REN_WHITE (Color){1.0f, 1.0f, 1.0f, 1.0f}
+#define REN_WHITE (vec4){1.0f, 1.0f, 1.0f, 1.0f}
+#define REN_RED (vec4){1.0f, 0.0f, 0.0f, 1.0f}
+#define REN_GREEN (vec4){0.0f, 1.0f, 0.0f, 1.0f}
+#define REN_PURPLE (vec4){1.0f, 0.0f, 1.0f, 1.0f}
+#define REN_BLACK (vec4){0.0f, 0.0f, 0.0f, 1.0f}
+#define REN_BLUE (vec4){0.0f, 0.0f, 1.0f, 1.0f}

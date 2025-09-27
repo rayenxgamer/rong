@@ -1,5 +1,6 @@
 #include <glad/gl.h>
 #include "GLFW/glfw3.h"
+#include "stb_image.h"
 #include <game/window.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -43,7 +44,7 @@ static void _framebuffer_size_callback(GLFWwindow* window, int width, int height
   glViewport(0, 0, width, height);
 };
 
-void window_init(RENGINE_FUNC_W init, RENGINE_FUNC_W_DT update, RENGINE_FUNC_W tick, RENGINE_FUNC_W render, RENGINE_FUNC_W shutdown){
+void window_init(RENGINE_FUNC_W init, RENGINE_FUNC_W_DT update, RENGINE_FUNC_W tick, RENGINE_FUNC_W render, RENGINE_FUNC_W shutdown, const char* icon_path){
   window.w_init = init;
   window.w_update = update;
   window.w_tick = tick;
@@ -88,6 +89,10 @@ void window_init(RENGINE_FUNC_W init, RENGINE_FUNC_W_DT update, RENGINE_FUNC_W t
   printf("Using %s\n", glGetString(GL_VENDOR));
   printf("On %s version: %s\n",glGetString(GL_RENDERER), glGetString(GL_VERSION));
   printf("Shader language: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+  GLFWimage images[1];
+  images[0].pixels = stbi_load(icon_path, &images[0].width, &images[0].height,0, 4);
+  glfwSetWindowIcon(window.self, 1, images);
 
   glfwSetFramebufferSizeCallback(window.self, _framebuffer_size_callback);
   glfwSwapInterval(1);

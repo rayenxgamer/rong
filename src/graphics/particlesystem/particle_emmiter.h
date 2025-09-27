@@ -8,7 +8,7 @@
 #define PARTICLE_LIST_MAX_COUNT 10
 
 struct particle {
-  struct rect particle_rectangle;
+  Rect particle_rectangle;
   Color color;
   float size_start, size_end;
   float lifetime, lifetime_left;

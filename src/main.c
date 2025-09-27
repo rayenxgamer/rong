@@ -11,6 +11,7 @@
 #include "game/ball.h"
 #include "game/window.h"
 #include "utils/log.h"
+#include "utils/graphics.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -20,17 +21,18 @@
 #define GRAVITY -1.0f
 
 background_props bprops;
-struct rect player1, player2, ball_rect;
-struct rect background_rect;
+Rect player1, player2, ball_rect;
+Rect background_rect;
 Shader debugshader;
 Shader textureshader;
+Shader fontshader;
 Shader particleshader;
 struct ortho_camera cam;
 struct ball ball_properties;
 struct particle_list_node* head;
 struct particle particle_default;
 Atlas font_atlas;
-struct rect font_atlas_rect;
+Rect font_atlas_rect;
 Texture font_atlas_texture;
 
 Texture loafer, string_ball, twach, bg_texture;
@@ -83,7 +85,7 @@ static void init(){
 
   window_set_attributes(640, 480, "RONG: on the RENGINE!");
 
-  particle_default.color = (Color){.0, .0, .0, 1.0};
+  vec4_copy(particle_default.color ,(Color){.0, .0, .0, 1.0});
   particle_default.lifetime = 1.0f;
 
   particle_default.particle_rectangle.x = 320.0f;
@@ -100,6 +102,7 @@ static void init(){
   head->next = NULL;
 
   shader_create(&debugshader, "shaders/vs.glsl", "shaders/fs.glsl");
+  shader_create(&fontshader, "shaders/fontshader/font_shader_vs.glsl", "shaders/fontshader/font_shader_fs.glsl");
   shader_create(&textureshader, "shaders/textureshaders/vs.glsl", "shaders/textureshaders/fs.glsl");
   shader_create(&particleshader, "shaders/particleshader/vs.glsl", "shaders/particleshader/fs.glsl");
 
@@ -111,13 +114,9 @@ static void init(){
 };
 
 static void render(){
-  glClearColor(.0f, .0f, .0f, .0f);
-  glClear(GL_COLOR_BUFFER_BIT);
+  renderer_clear_color(0.0f, 0.0f, 0.0f, 0.0f);
 
-  glUseProgram(textureshader.handle);
-
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  ENABLE_BLEND_MINUS_ALPHA();
   renderer_drawbackground(&bprops, &textureshader);
 
   font_draw_word(&game_font, "hello", 290, 340, 50, 50, REN_WHITE, 50, &textureshader);
@@ -125,15 +124,14 @@ static void render(){
 
   renderer_drawrect_tex(ball_rect, &textureshader);
 
-  glUseProgram(particleshader.handle);
   particles_update(head, &particleshader);
 
-  glUseProgram(textureshader.handle);
+  font_draw_word_color_single(&game_font, "love", 200.0f, 200.0f, 50, 50, REN_RED, 50, &fontshader);
 
   renderer_drawrect_tex(player2, &textureshader);
   renderer_drawrect_tex(player1, &textureshader);
 
-  glDisable(GL_BLEND);
+  DISBLE_BLEND();
 };
 
 static void tick(){
@@ -152,6 +150,7 @@ static void update(float deltatime){
   camera_update(cam, &debugshader);
   camera_update(cam, &textureshader);
   camera_update(cam, &particleshader);
+  camera_update(cam, &fontshader);
 
   rengine_math_ortho(cam.projection_matrix, cam.left, cam.right, cam.bottom, cam.top , cam.near, cam.far);
 
@@ -222,7 +221,7 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  window_init(init, update, tick, render, shutdown);
+  window_init(init, update, tick, render, shutdown, "assets/sprites/string_ball.png");
   window_updateloop();
   return 0;
 };
