@@ -24,6 +24,7 @@ void window_set_attributes(int height, int width, char* title);
 void window_updateloop();
 void window_set_should_close();
 bool window_is_pressed(int key);
+bool window_is_just_pressed(int key);
 static void _init();
 static void _update(float delta_time);
 static void _tick();

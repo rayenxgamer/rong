@@ -112,6 +112,16 @@ bool window_is_pressed(int key){
   }
 };
 
+bool window_is_just_pressed(int key){
+  int key_state = glfwGetKey(window.self, key);
+
+  if (key_state == GLFW_PRESS && key_state != GLFW_REPEAT) {
+    return 1;
+  }else {
+    return 0;
+  };
+};
+
 void window_set_should_close(){
   glfwSetWindowShouldClose(window.self, true);
 }

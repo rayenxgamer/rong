@@ -1,4 +1,6 @@
+#include "audio/audio.h"
 #include "graphics/camera.h"
+#include "graphics/defines/colors.h"
 #include "graphics/shader.h"
 #include "graphics/texture.h"
 #include "graphics/renderer.h"
@@ -10,17 +12,21 @@
 #include "math/vec2.h"
 #include "game/ball.h"
 #include "game/window.h"
-#include "utils/log.h"
+#include "utils/general.h"
 #include "utils/graphics.h"
 
+#include <pthread.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
 
 #define PLAYER_VERT_SPEED 6.0f
 #define GRAVITY -1.0f
+#define SOUND_COUNT 1
 
 background_props bprops;
+
 Rect player1, player2, ball_rect;
 Rect background_rect;
 Shader debugshader;
@@ -39,12 +45,22 @@ Texture loafer, string_ball, twach, bg_texture;
 Texture star_particle;
 Font game_font;
 
+static Sound sounds[SOUND_COUNT];
+
+static const char* sound_file_paths_buffer[SOUND_COUNT] = {
+  "assets/music/temp/music_loop.mp3",
+};
+
+// TODO: make this a little more intuitive
 vec2 player1_coords;
 vec2 player2_coords;
 
 unsigned int total_tick_count = 0;
 
 static void init(){
+
+  ren_audio_init(SOUND_COUNT, sound_file_paths_buffer, sounds);
+
   vec2_copy(player1_coords, (vec2){590.0f, 180.0f});
   vec2_copy(player2_coords, (vec2){25.0f, 180.0f});
 
@@ -111,6 +127,8 @@ static void init(){
   player2 = renderer_initrect_tex(player2_coords[0], player2_coords[1], 120.0f, 25.0f, loafer);
 
   ball_properties.ball_rectangle = &ball_rect;
+
+  ren_audio_play_volume(&sounds[0], REN_AUDIO_LOOP, .6);
 };
 
 static void render(){
@@ -119,14 +137,14 @@ static void render(){
   ENABLE_BLEND_MINUS_ALPHA();
   renderer_drawbackground(&bprops, &textureshader);
 
-  font_draw_word(&game_font, "hello", 290, 340, 50, 50, REN_WHITE, 50, &textureshader);
-  font_draw_word(&game_font, "world!", 240, 240, 50, 50, REN_WHITE, 50, &textureshader);
+  font_draw_one_letter_color(&game_font, 'r', 220, 360, 50, 50, REN_RED, &fontshader);
+  font_draw_one_letter_color(&game_font, 'o', 270, 360, 50, 50, REN_BLUE, &fontshader);
+  font_draw_one_letter_color(&game_font, 'n', 330, 360, 50, 50, REN_YELLOW_GOLDEN, &fontshader);
+  font_draw_one_letter_color(&game_font, 'g', 380, 360, 50, 50, REN_ORANGE_DEV, &fontshader);
 
   renderer_drawrect_tex(ball_rect, &textureshader);
 
   particles_update(head, &particleshader);
-
-  font_draw_word_color_single(&game_font, "love", 200.0f, 200.0f, 50, 50, REN_RED, 50, &fontshader);
 
   renderer_drawrect_tex(player2, &textureshader);
   renderer_drawrect_tex(player1, &textureshader);
@@ -145,7 +163,6 @@ static void tick(){
     total_tick_count = 0;
   }
 };
-
 static void update(float deltatime){
   camera_update(cam, &debugshader);
   camera_update(cam, &textureshader);
@@ -165,15 +182,6 @@ static void update(float deltatime){
 
   if (window_is_pressed(GLFW_KEY_I))
     player2.y += PLAYER_VERT_SPEED;
-
-  //
-  // ---------- debugging ----------
-  if (window_is_pressed(GLFW_KEY_EQUAL))
-    ball_properties.vel[0] += 1.0f;
-  if (window_is_pressed(GLFW_KEY_MINUS))
-    ball_properties.vel[1] -= 1.0f;
-  // -------------------------------;
-  //
 
   ball_update(&ball_properties, deltatime);
   ball_do_collisions(&ball_properties, &player1, &player2);
@@ -217,7 +225,7 @@ int main(int argc, char* argv[]) {
       printf("\t--debug to enable debug mode\n");
       printf("\t--help to print this again!\n");
     }else{
-      printf("use '--help' for launch parameters!");
+      printf("use '--help' for launch parameters!\n");
     }
   }
 
@@ -225,4 +233,3 @@ int main(int argc, char* argv[]) {
   window_updateloop();
   return 0;
 };
-

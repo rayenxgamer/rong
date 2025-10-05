@@ -3,8 +3,10 @@
 #include "math/vec2.h"
 
 #include <assert.h>
+#include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 static inline int isletterinbuffer(char letter, const char* buffer){
   assert(buffer != NULL);
@@ -43,4 +45,21 @@ static inline bool isletterinbuffermulti_gi(char letter, int x, int y, const cha
   output = NULL;
 
   return false;
+}
+
+static inline void print_string(const char* string) {
+  assert(string != NULL);
+  printf("%s", string);
+}
+
+static inline void print_stringln(const char* string) {
+  assert(string != NULL);
+  printf("%s\n", string);
+}
+
+static inline void print_array_of_strings(size_t size, const char* string[size]){
+  assert(string != NULL);
+  for (uint32_t i = 0; i < size; i++) {
+    printf("%s\n", string[i]);
+  }
 }
