@@ -18,7 +18,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include <unistd.h>
+
+#define SCREEN_WIDTH 640.0f
+#define SCREEN_HEIGHT 480.0f
 
 #define PLAYER_VERT_SPEED 6.0f
 #define GRAVITY -1.0f
@@ -66,10 +68,11 @@ static void init(){
   vec2_copy(player2_coords, (vec2){25.0f, 180.0f});
 
   srand(time(NULL));
+
   ball_properties.vel[0] = rand_range(-5, 5);
   ball_properties.vel[1] = rand_range(-5, 5);
 
-  camera = camera_init(CAMERA_ORTHOGRAPHIC ,(vec3){0.0f, 0.0f, 0.0f}, 0.0f, 640.0f, 0.0f, 480.0f, -1.0f, 1.0f);
+  camera = camera_init(CAMERA_ORTHOGRAPHIC ,(vec3){0.0f, 0.0f, 0.0f}, 0.0f, SCREEN_WIDTH, 0.0f, SCREEN_HEIGHT, -1.0f, 1.0f);
 
   bg_texture = tex_create("assets/sprites/level_background_purpur-dreams.png", true);
   loafer = tex_create("assets/sprites/player_loafer.png", true);
@@ -93,9 +96,9 @@ static void init(){
 
   game_font = font_init(&font_atlas, font_buffer);
 
-  bprops = renderer_initbackground((background_props){480.0f, 640.0f, bg_texture});
+  bprops = renderer_initbackground((background_props){SCREEN_HEIGHT, SCREEN_WIDTH, bg_texture});
 
-  window_set_attributes(640, 480, "RONG: on the RENGINE!");
+  window_set_attributes(SCREEN_WIDTH, SCREEN_HEIGHT, "RONG: on the RENGINE!");
 
   vec4_copy(particle_default.color ,(Color){.0, .0, .0, 1.0});
   particle_default.lifetime = 1.0f;
@@ -123,7 +126,6 @@ static void init(){
   player2 = renderer_initrect_tex(player2_coords[0], player2_coords[1], 120.0f, 25.0f, loafer);
 
   ball_properties.ball_rectangle = &ball_rect;
-
 
   ren_audio_play_volume(&sounds[0], REN_AUDIO_LOOP, .6);
 };
@@ -183,6 +185,16 @@ static void update(float deltatime){
 
   if (window_is_pressed(GLFW_KEY_I))
     player2.y += PLAYER_VERT_SPEED;
+
+  if(ball_properties.ball_rectangle->x <= 0.0f){
+    player2_score++;
+    ball_reset(&ball_properties, deltatime);
+  }
+
+  if (ball_properties.ball_rectangle->x + ball_properties.ball_rectangle->width >= 680.0f) {
+    player1_score++;
+    ball_reset(&ball_properties, deltatime);
+  }
 
   ball_update(&ball_properties, deltatime);
   ball_do_collisions(&ball_properties, &player1, &player2);

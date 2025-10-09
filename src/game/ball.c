@@ -1,33 +1,31 @@
+#include "audio/audio.h"
 #include <game/ball.h>
+#include <stdio.h>
 
 bool ball_is_on_right_side(struct ball *ball, float middle_of_screen) {
   if (ball->ball_rectangle->x < middle_of_screen) {
     return true;
   }
   return false;
-}
+};
+
+void ball_reset(struct ball *ball, float deltatime){
+    ball->ball_rectangle->x = 320.0f;
+    ball->ball_rectangle->y = 240.0f;
+    ball->vel[0] = ball->vel[0] * -1.0;
+
+    // right side
+    ball->ball_rectangle->x = 320.0f;
+    ball->ball_rectangle->y = 240.0f;
+};
 
 void ball_update(struct ball *ball_props,float deltatime){
-
   if (ball_props->vel[1] > MAX_BALL_VELOCITY_Y) {
     ball_props->vel[1] = MAX_BALL_VELOCITY_Y;
   }
 
   if (ball_props->vel[0] > MAX_BALL_VELOCITY_X) {
     ball_props->vel[0] = MAX_BALL_VELOCITY_X;
-  }
-
-  if(ball_props->ball_rectangle->x <= 0.0f){
-    // left side
-    ball_props->ball_rectangle->x = 320.0f;
-    ball_props->ball_rectangle->y = 240.0f;
-    ball_props->vel[0] = ball_props->vel[0] * -1.0;
-  }
-
-  if (ball_props->ball_rectangle->x + ball_props->ball_rectangle->width >= 680.0f) {
-    // right side
-    ball_props->ball_rectangle->x = 320.0f;
-    ball_props->ball_rectangle->y = 240.0f;
   }
 
   if(ball_props->ball_rectangle->y <= 0.0f){
@@ -42,17 +40,21 @@ void ball_update(struct ball *ball_props,float deltatime){
 };
 
 void ball_bounce(struct ball *ball_props, Rect player){
+
+  ren_audio_play_engine("assets/music/temp/bounce.mp3");
+
   float distanceballrect = 0.0f;
   float center_of_paddle = 0.0f;
-  // reminder, the rects's X is not the middle, it's the bottom left
-    center_of_paddle = player.y + (player.height / 2.0f);
-    distanceballrect = ball_props->ball_rectangle->y + (ball_props->ball_rectangle->height / 2.0f) - center_of_paddle;
 
-  if (distanceballrect < 15.0f && distanceballrect > -15.0f) {
+  // reminder, the rects's X is not the middle, it's the bottom left
+  center_of_paddle = player.y + (player.height / 2.0f);
+  distanceballrect = ball_props->ball_rectangle->y + (ball_props->ball_rectangle->height / 2.0f) - center_of_paddle;
+
+  if (distanceballrect < 12.0f && distanceballrect > -12.0f) {
       // middle of the paddle itself
       ball_props->vel[0]= -ball_props->vel[0];
       ball_props->vel[1] = ball_props->vel[1] * .4f; // will decrease the y velocity making the ball go up and down slower
-    }else if (distanceballrect < 40.0f && distanceballrect > 15.0f ){
+    }else if (distanceballrect < 40.0f && distanceballrect > 12.0f ){
       // just above the middle of the paddle
       ball_props->vel[0] = ball_props->vel[0] * -1.f;
       ball_props->vel[1] = ball_props->vel[1] * 1.6f;
@@ -64,22 +66,22 @@ void ball_bounce(struct ball *ball_props, Rect player){
       // very top of paddle
       ball_props->vel[0] = ball_props->vel[0] * -1.f;
       ball_props->vel[1] = ball_props->vel[1] * 2.0f;
-    }else if (distanceballrect < -15.0f && distanceballrect > -40.0f ){
+    }else if (distanceballrect < -12.0f && distanceballrect > -40.0f ){
       // just under middle bottom
       ball_props->vel[0] = ball_props->vel[0] * -1.f;
-      ball_props->vel[1] = ball_props->vel[1] * 1.6f;
+      ball_props->vel[1] = -(ball_props->vel[1]) + (-0.4);
     }else if (distanceballrect < -40.0f && distanceballrect > -60.0f ){
       // midway bottom
       ball_props->vel[0] = ball_props->vel[0] * -1.0f;
-      ball_props->vel[1] = ball_props->vel[1] * 1.8f;
+      ball_props->vel[1] = -(ball_props->vel[1]) + (-0.8);
     }else if (distanceballrect < -60.0f && distanceballrect > -72.5f ){
       // fully under
       ball_props->vel[0] = ball_props->vel[0] * -1.0f;
-      ball_props->vel[1] = ball_props->vel[1] * 2.0f;
+      ball_props->vel[1] = -(ball_props->vel[1]) + (-1.8);
     }else{
       // top or bottom of the paddle itself
       ball_props->vel[0] = ball_props->vel[0] * -1.0f;
-      ball_props->vel[1] = ball_props->vel[1] * -1.0f;
+      ball_props->vel[1] = ball_props->vel[1] * -.12;
     };
 }
 
@@ -159,6 +161,7 @@ static float aabb_get_collision_time_between_(struct ball* ball_props, Rect* obs
   }
   return enterytime;
 };
+
 void ball_do_collisions(struct ball* ball, Rect* obstacle, Rect* player2rect){
   float collisiontime;
   bool is_on_right_side;
@@ -186,9 +189,8 @@ void ball_do_collisions(struct ball* ball, Rect* obstacle, Rect* player2rect){
 
     if (is_on_right_side) { /* this means that the calculation will go based on the right side player's posisition */
       ball_bounce(ball, *obstacle);
-    }else{
+    } else {
       ball_bounce(ball, *player2rect);
     }
-  // printf("collided!\n");
   }
 };

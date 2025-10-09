@@ -36,6 +36,7 @@ void ren_audio_play(Sound* sound, int flags){
   if (flags == REN_AUDIO_LOOP) {
     ma_sound_set_looping(sound, MA_TRUE);
   }
+
   if(ma_sound_start(sound) != MA_SUCCESS){
     fprintf(stderr, "failed to play audio\n");
   };
