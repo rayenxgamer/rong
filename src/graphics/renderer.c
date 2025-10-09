@@ -1,8 +1,10 @@
 #include "graphics/buffer.h"
+#include "graphics/shader.h"
+#include "graphics/texture.h"
 #include "math/mat4.h"
 #include <graphics/renderer.h>
 
-void renderer_directdrawline(float xstart, float ystart, float xend, float yend, Shader shader){
+void renderer_directdrawline(float xstart, float ystart, float xend, float yend, Shader* shader){
 
   uint32_t vao = vao_create();
   uint32_t vbo = vbo_create();
@@ -16,6 +18,8 @@ void renderer_directdrawline(float xstart, float ystart, float xend, float yend,
   vbo_buffer(sizeof(line_vertices_buffer), line_vertices_buffer, GL_STATIC_DRAW);
 
   vao_attrib(vao, vbo, 0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+
+  shader_bind(*shader);
 
   glEnable(GL_LINE_SMOOTH);
   glHint(GL_LINE_SMOOTH_HINT,  GL_NICEST);
@@ -62,21 +66,22 @@ Rect renderer_initrect_tex(float x, float y, float height, float width, Texture 
 
 void renderer_drawrect_tex(Rect rectangle, Shader* shader){
   /* rendering code here */
-  mat4 model1;
-  mat4_identity(model1);
+  mat4 model;
+  mat4_identity(model);
 
-  mat4_translate(model1, (vec3){rectangle.x, rectangle.y, 0.0f});
-  mat4_scalev_make(model1,(vec3){rectangle.width, rectangle.height, 0.0f});
+  mat4_translate(model, (vec3){rectangle.x, rectangle.y, 0.0f});
+  mat4_scalev_make(model,(vec3){rectangle.width, rectangle.height, 0.0f});
 
   shader_bind(*shader);
   tex_bind(rectangle.texture);
-  glUniform1i(glGetUniformLocation(shader->handle, "texture0"), 0);
-  glUniformMatrix4fv(glGetUniformLocation(shader->handle, "model"), 1, GL_FALSE, &model1[0][0]);
+
+  shader_seti(*shader, "texture0", 0);
+  shader_setm4x4(*shader, "model", model);
 
   /* TODO: code to handle rotation */
-  glActiveTexture(GL_TEXTURE0);
+  tex_activate(GL_TEXTURE0);
   tex_bind(rectangle.texture);
-  glBindVertexArray(rectangle.vao_);
+  vao_bind(rectangle.vao_);
   glDrawArrays(GL_TRIANGLES, 0, 6);
 };
 
@@ -108,19 +113,18 @@ Rect renderer_initrect(float x, float y, float height, float width){
 
 void renderer_drawrect(Rect rectangle, Shader* shader){
   /* rendering code here */
-  glUseProgram(shader->handle);
   mat4 model;
   mat4_identity(model);
 
   mat4_translate(model, (vec3){rectangle.x, rectangle.y, 0.0f});
   mat4_scalev_make(model,(vec3){rectangle.height, rectangle.width, 0.0f});
 
+  shader_bind(*shader);
   shader_setm4x4(*shader, "model", model);
 
   /* TODO: code to handle rotation */
   vao_bind(rectangle.vao_);
   glDrawArrays(GL_TRIANGLES, 0, 6);
-  return;
 };
 
 Rect renderer_init_particles(Rect* rectangle, Color color, Shader* shader){
@@ -150,21 +154,24 @@ Rect renderer_init_particles(Rect* rectangle, Color color, Shader* shader){
 
 void renderer_drawrect_particle(Rect* rectangle, Color color, Shader* shader){
   /* rendering code here */
-  mat4 model1;
-  mat4_identity(model1);
+  mat4 model;
+  mat4_identity(model);
 
-  mat4_translate(model1, (vec3){rectangle->x, rectangle->y, 0.0f});
-  mat4_scalev_make(model1,(vec3){rectangle->width, rectangle->height, 0.0f});
+  mat4_translate(model, (vec3){rectangle->x, rectangle->y, 0.0f});
+  mat4_scalev_make(model,(vec3){rectangle->width, rectangle->height, 0.0f});
 
   tex_bind(rectangle->texture);
-  glUniform1i(glGetUniformLocation(shader->handle, "texture0"), 0);
-  glUniformMatrix4fv(glGetUniformLocation(shader->handle, "model"), 1, GL_FALSE, &model1[0][0]);
-  glUniform1f(glGetUniformLocation(shader->handle, "color"), color[3]);
+
+  shader_bind(*shader);
+  shader_seti(*shader, "texture0", 0);
+  shader_setm4x4(*shader, "model", model);
+  shader_seti(*shader, "color", color[3]);
 
   /* TODO: code to handle rotation */
-  glActiveTexture(GL_TEXTURE0);
+  tex_activate(GL_TEXTURE0);
   tex_bind(rectangle->texture);
-  glBindVertexArray(rectangle->vao_);
+
+  vao_bind(rectangle->vao_);
 
   glDrawArrays(GL_TRIANGLES, 0, 6);
 };
@@ -264,12 +271,12 @@ void renderer_drawfromatlas(Atlas atlas, Rect* rectangle , Shader* shader){
   mat4_scalev_make(model,(vec3){rectangle->width, rectangle->height, 0.0f});
 
   tex_bind(*atlas.texture);
-  glUniform1i(glGetUniformLocation(shader->handle, "texture0"), 0);
-  glUniformMatrix4fv(glGetUniformLocation(shader->handle, "model"), 1, GL_FALSE, &model[0][0]);
+  shader_seti(*shader, "texture0", 0);
+  shader_setm4x4(*shader, "model", model);
 
-  glActiveTexture(GL_TEXTURE0);
+  tex_activate(GL_TEXTURE0);
 
-  glBindVertexArray(rectangle->vao_);
+  vao_bind(rectangle->vao_);
   glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 

@@ -1,7 +1,9 @@
+#include "window.h"
+
+#include <GLFW/glfw3.h>
 #include <glad/gl.h>
-#include "GLFW/glfw3.h"
-#include "stb_image.h"
-#include <game/window.h>
+#include <stb_image.h>
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -91,7 +93,7 @@ void window_init(RENGINE_FUNC_W init, RENGINE_FUNC_W_DT update, RENGINE_FUNC_W t
   printf("Shader language: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
   GLFWimage images[1];
-  images[0].pixels = stbi_load(icon_path, &images[0].width, &images[0].height,0, 4);
+  images[0].pixels = stbi_load(icon_path, &images[0].width, &images[0].height, 0, 4);
   glfwSetWindowIcon(window.self, 1, images);
 
   glfwSetFramebufferSizeCallback(window.self, _framebuffer_size_callback);

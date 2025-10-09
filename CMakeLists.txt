@@ -13,9 +13,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_executable(rong
   src/main.c
-  src/game/window.c
-  src/input/input.c
   src/game/ball.c
+  src/input/input.c
+  src/graphics/window.c
   src/graphics/renderer.c
   src/graphics/shader.c
   src/graphics/buffer.c
@@ -74,13 +74,10 @@ if(NOT glad_POPULATED)
 endif()
 
 if(WIN32)
-   target_link_libraries(rong PUBLIC glad glfw pthread m)
+   target_link_libraries(rong PUBLIC glad glfw pthread)
 else()
    target_link_libraries(rong PUBLIC glad glfw pthread m)
 endif()
-
-target_include_directories(rong PUBLIC sndfile)
-target_include_directories(rong PUBLIC deps/portaudio/include)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

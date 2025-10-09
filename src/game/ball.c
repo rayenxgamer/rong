@@ -1,5 +1,12 @@
 #include <game/ball.h>
 
+bool ball_is_on_right_side(struct ball *ball, float middle_of_screen) {
+  if (ball->ball_rectangle->x < middle_of_screen) {
+    return true;
+  }
+  return false;
+}
+
 void ball_update(struct ball *ball_props,float deltatime){
 
   if (ball_props->vel[1] > MAX_BALL_VELOCITY_Y) {
@@ -11,12 +18,14 @@ void ball_update(struct ball *ball_props,float deltatime){
   }
 
   if(ball_props->ball_rectangle->x <= 0.0f){
+    // left side
     ball_props->ball_rectangle->x = 320.0f;
     ball_props->ball_rectangle->y = 240.0f;
     ball_props->vel[0] = ball_props->vel[0] * -1.0;
   }
 
   if (ball_props->ball_rectangle->x + ball_props->ball_rectangle->width >= 680.0f) {
+    // right side
     ball_props->ball_rectangle->x = 320.0f;
     ball_props->ball_rectangle->y = 240.0f;
   }
@@ -30,7 +39,7 @@ void ball_update(struct ball *ball_props,float deltatime){
     ball_props->vel[1] = -ball_props->vel[1];
     ball_props->ball_rectangle->y = 480.0f - ball_props->ball_rectangle->height;
   }
-}
+};
 
 void ball_bounce(struct ball *ball_props, Rect player){
   float distanceballrect = 0.0f;
@@ -150,21 +159,16 @@ static float aabb_get_collision_time_between_(struct ball* ball_props, Rect* obs
   }
   return enterytime;
 };
-
 void ball_do_collisions(struct ball* ball, Rect* obstacle, Rect* player2rect){
-  const float middle_of_screen = 320.0f;
-
   float collisiontime;
   bool is_on_right_side;
 
   float percentage_of_velocity_change = 0.0f;
 
-  if (ball->ball_rectangle->x < middle_of_screen) {
+  if (ball_is_on_right_side(ball, MIDDLE_OF_SCREEN)){
     collisiontime = aabb_get_collision_time_between_(ball, player2rect);
-    is_on_right_side = false;
   }else{
     collisiontime = aabb_get_collision_time_between_(ball, obstacle);
-    is_on_right_side = true;
   }
 
   const float max_time_untill_collision = 1.0f;

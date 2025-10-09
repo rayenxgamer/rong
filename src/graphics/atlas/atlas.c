@@ -7,9 +7,6 @@ Atlas atlas_create(uint32_t size_x, uint32_t size_y, Texture* texture){
 void* atlas_get_texture_at(Atlas* atlas ,uint32_t x, uint32_t y){
   float y_max = atlas->texture->height;
 
-  // assert(x <= ((atlas->texture->width / atlas->size_x_) - 1));
-  // assert(y <=((atlas->texture->height / atlas->size_y_) - 1));
-
   vec4 pixel_coords;
   vec4 uvs = {.0,.0,.0,.0};
   void* p;

@@ -56,6 +56,10 @@ Texture tex_create(const char* path, bool flipped){
   return self;
 }
 
+void tex_activate(ren_tex_unit unit){
+  glActiveTexture(unit);
+}
+
 void tex_bind(Texture texture){
   glBindTexture(GL_TEXTURE_2D, texture.handle);
 };

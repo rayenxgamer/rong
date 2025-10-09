@@ -74,6 +74,8 @@ void font_draw_word_color_single(Font* font ,const char* input, float x, float y
   uint32_t i = 0;
   float last_offset = x;
 
+  shader_bind(*shader);
+
   while (i < strlen(input)) {
     font_draw_one_letter_color(font, input[i], last_offset, y, width, height, color, shader);
     last_offset += offset;
@@ -86,6 +88,8 @@ void font_draw_word_color(Font* font ,const char* input, float x, float y, float
   uint32_t i = 0;
   float last_offset = x;
 
+  shader_bind(*shader);
+
   while (i < strlen(input)) {
     font_draw_one_letter_color(font, input[i], last_offset, y, width, height, color_buffer[i], shader);
     last_offset += offset;
@@ -93,12 +97,14 @@ void font_draw_word_color(Font* font ,const char* input, float x, float y, float
   }
 }
 
-void font_draw_word(Font* font ,const char* input, float x, float y, float width, float height, Color color, float offset, Shader* shader){
+void font_draw_word(Font* font ,const char* input, float x, float y, float width, float height, float offset, Shader* shader){
   uint32_t i = 0;
   float last_offset = x;
 
+
+  shader_bind(*shader);
   while (i < strlen(input)) {
-    font_draw_one_letter(font, input[i], last_offset, y, width, height, shader);
+    font_draw_one_letter_color(font, input[i], last_offset, y, width, height, REN_WHITE,shader);
     last_offset += offset;
     i++;
   }

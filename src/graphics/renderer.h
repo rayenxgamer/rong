@@ -23,7 +23,7 @@ typedef struct {
 } background_props;
 
 void renderer_drawaabbs();
-void renderer_directdrawline(float xstart, float ystart, float xend, float yend, Shader shader);
+void renderer_directdrawline(float xstart, float ystart, float xend, float yend, Shader* shader);
 
 background_props renderer_initbackground(background_props props);
 void renderer_drawbackground(background_props* props ,Shader* shader);

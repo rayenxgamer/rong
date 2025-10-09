@@ -25,4 +25,4 @@ void font_draw_word_color_single(Font* font ,const char* input, float x, float y
 void font_draw_word_color(Font* font ,const char* input, float x, float y, float width, float height,
                           int buffer_size ,Color color_buffer[buffer_size], float offset, Shader* shader);
 
-void font_draw_word(Font* font, const char* input, float x, float y, float height, float width, Color color, float offset, Shader* shader);
+void font_draw_word(Font* font, const char* input, float x, float y, float height, float width, float offset, Shader* shader);

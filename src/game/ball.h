@@ -4,12 +4,15 @@
 #include <graphics/renderer.h>
 #include <math/vec2.h>
 
+#define MIDDLE_OF_SCREEN 320.0f
+
 #define MAX_BALL_VELOCITY_X 6.0f
 #define MAX_BALL_VELOCITY_Y 3.0f
 
 struct ball{
   Rect* ball_rectangle;
   vec2 vel;
+  // TODO: add parts for bounce callbacks
 };
 
 static float aabb_get_collision_time_between_(struct ball* ball_props, Rect* rect2);

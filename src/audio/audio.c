@@ -20,6 +20,8 @@ void ren_audio_init(size_t count, const char* audio_init_buffer_in [count], Soun
   printf("initialized all sounds! moving on\n");
 };
 
+
+// used to init one single audio, mostly for testing, ren_audio_init is better handled.
 void ren_audio_init_one_sound_debug(const char* sound_path , Sound* output_sounds){
   if(ma_engine_init(NULL, &engine) != MA_SUCCESS){
     fprintf(stderr, "could'nt initialize miniaudio audio engine!\n");

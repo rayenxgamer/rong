@@ -7,13 +7,12 @@
 #include "graphics/atlas/atlas.h"
 #include "graphics/particlesystem/particle_emmiter.h"
 #include "graphics/font/font.h"
-#include "math/projection.h"
 #include "math/common.h"
 #include "math/vec2.h"
 #include "game/ball.h"
-#include "game/window.h"
-#include "utils/general.h"
+#include "graphics/window.h"
 #include "utils/graphics.h"
+#include "utils/string.h"
 
 #include <pthread.h>
 #include <stdio.h>
@@ -25,6 +24,9 @@
 #define GRAVITY -1.0f
 #define SOUND_COUNT 1
 
+static int player1_score = 0;
+static int player2_score = 0;
+
 background_props bprops;
 
 Rect player1, player2, ball_rect;
@@ -33,12 +35,11 @@ Shader debugshader;
 Shader textureshader;
 Shader fontshader;
 Shader particleshader;
-struct ortho_camera cam;
+Camera camera;
 struct ball ball_properties;
 struct particle_list_node* head;
 struct particle particle_default;
 Atlas font_atlas;
-Rect font_atlas_rect;
 Texture font_atlas_texture;
 
 Texture loafer, string_ball, twach, bg_texture;
@@ -68,7 +69,7 @@ static void init(){
   ball_properties.vel[0] = rand_range(-5, 5);
   ball_properties.vel[1] = rand_range(-5, 5);
 
-  cam = camera_init_ortho((vec3){0.0f, 0.0f, 0.0f}, 0.0f, 640.0f, 0.0f, 480.0f, -1.0f, 1.0f);
+  camera = camera_init(CAMERA_ORTHOGRAPHIC ,(vec3){0.0f, 0.0f, 0.0f}, 0.0f, 640.0f, 0.0f, 480.0f, -1.0f, 1.0f);
 
   bg_texture = tex_create("assets/sprites/level_background_purpur-dreams.png", true);
   loafer = tex_create("assets/sprites/player_loafer.png", true);
@@ -80,13 +81,8 @@ static void init(){
   font_atlas = (Atlas){
     .texture = &font_atlas_texture,
     .size_x_ = 8,
-    .size_y_ = 8
+    .size_y_ = 8,
   };
-
-  vec4 position;
-  vec4_copy(position ,atlas_get_texture_at(&font_atlas, 11, 0));
-  font_atlas_rect = renderer_initatlas(font_atlas, position,
-                                    300.0f, 240.0f, 50, 50);
 
   char font_buffer[FONT_MAX_HEIGHT][FONT_MAX_WIDTH] = {
     "abcdefghijklmnop",
@@ -128,6 +124,7 @@ static void init(){
 
   ball_properties.ball_rectangle = &ball_rect;
 
+
   ren_audio_play_volume(&sounds[0], REN_AUDIO_LOOP, .6);
 };
 
@@ -141,6 +138,9 @@ static void render(){
   font_draw_one_letter_color(&game_font, 'o', 270, 360, 50, 50, REN_BLUE, &fontshader);
   font_draw_one_letter_color(&game_font, 'n', 330, 360, 50, 50, REN_YELLOW_GOLDEN, &fontshader);
   font_draw_one_letter_color(&game_font, 'g', 380, 360, 50, 50, REN_ORANGE_DEV, &fontshader);
+
+  font_draw_word(&game_font, int_to_string(player1_score), 90, 390, 35, 35, 40, &fontshader);
+  font_draw_word(&game_font, int_to_string(player2_score), 480, 390, 35, 35, 40, &fontshader);
 
   renderer_drawrect_tex(ball_rect, &textureshader);
 
@@ -163,13 +163,14 @@ static void tick(){
     total_tick_count = 0;
   }
 };
-static void update(float deltatime){
-  camera_update(cam, &debugshader);
-  camera_update(cam, &textureshader);
-  camera_update(cam, &particleshader);
-  camera_update(cam, &fontshader);
 
-  rengine_math_ortho(cam.projection_matrix, cam.left, cam.right, cam.bottom, cam.top , cam.near, cam.far);
+static void update(float deltatime){
+  camera_update(camera, &debugshader);
+  camera_update(camera, &textureshader);
+  camera_update(camera, &particleshader);
+  camera_update(camera, &fontshader);
+
+  rengine_compute_ortho(camera.projection_matrix, camera.left, camera.right, camera.bottom, camera.top , camera.near, camera.far);
 
   if (window_is_pressed(GLFW_KEY_S))
     player1.y -= PLAYER_VERT_SPEED;
@@ -203,15 +204,14 @@ static void update(float deltatime){
   if(player2.y <= 0.0f){
     player2.y = 0.0f;
   };
-  int x = 1;
-  ALOG(x, "did work");
 };
 
 static void shutdown(){
+  ren_audio_terminate(SOUND_COUNT, sounds);
 };
 
 int main(int argc, char* argv[]) {
-  if (argc == 2) {
+  if (argc >= 2) {
     int parameter_count = 2;
     char debug_string[] = "--debug";
     char help_string[] = "--help";

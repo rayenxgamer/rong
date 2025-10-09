@@ -13,5 +13,8 @@ typedef struct {
   float height, width;
 } Texture;
 
+typedef unsigned int ren_tex_unit;
+
 Texture tex_create(const char* path, bool flipped);
 void tex_bind(Texture texture);
+void tex_activate(ren_tex_unit unit);

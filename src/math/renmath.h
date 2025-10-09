@@ -1,7 +1,6 @@
 #pragma once
 
 #include "math/common.h"
-#include "math/projection.h"
 #include "math/aabb.h"
 #include "math/vec2.h"
 #include "math/mat3.h"
