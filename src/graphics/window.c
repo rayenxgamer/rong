@@ -58,8 +58,10 @@ void window_init(RENGINE_FUNC_W init, RENGINE_FUNC_W_DT update, RENGINE_FUNC_W t
     exit(1);
   }
 
-  glfwWindowHint(GLFW_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
   /* bugged for some reason?
      glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); */

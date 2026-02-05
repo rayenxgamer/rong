@@ -178,7 +178,7 @@ void renderer_drawrect_particle(Rect* rectangle, Color color, Shader* shader){
 
 background_props renderer_initbackground(background_props props){
   uint32_t vao = vao_create();
-   uint32_t vbo = vbo_create();
+  uint32_t vbo = vbo_create();
 
   const float vertices_buffer[] = {
     0.0f,1.0f, 0.0f, 0.0f, 1.0f,
@@ -208,6 +208,8 @@ void renderer_drawbackground(background_props* props ,Shader* shader){
 
   mat4_translate(model, (vec3){0, 0, 0.0f});
   mat4_scalev_make(model,(vec3){props->window_width, props->window_height, 0.0f});
+
+  glUseProgram(shader->handle);
 
   tex_bind(props->texture2D);
   glUniform1i(glGetUniformLocation(shader->handle, "texture0"), 0);

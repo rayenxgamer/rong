@@ -134,6 +134,7 @@ static void render(){
   renderer_clear_color(0.0f, 0.0f, 0.0f, 0.0f);
 
   ENABLE_BLEND_MINUS_ALPHA();
+
   renderer_drawbackground(&bprops, &textureshader);
 
   font_draw_one_letter_color(&game_font, 'r', 220, 360, 50, 50, REN_RED, &fontshader);
